@@ -21,6 +21,7 @@ import {
   updateVideoRelease,
 } from "@/lib/firestore";
 import type { Campaign, InHouseVideo, SocialPost, VideoRelease } from "@/lib/types";
+import { normalizeExternalUrl } from "@/lib/urls";
 
 type Tab = "tweets" | "releases" | "inhouse" | "campaigns";
 
@@ -122,7 +123,7 @@ function SocialPostsSection() {
       scheduledDate: form.scheduledDate,
       status: form.status,
       cost: form.cost || undefined,
-      link: form.link.trim() || undefined,
+      link: normalizeExternalUrl(form.link.trim()),
       notes: form.notes.trim() || undefined,
     };
     if (editing) await updateSocialPost(editing.id, data);
@@ -195,7 +196,7 @@ function VideoReleasesSection() {
       title: form.title.trim(),
       scheduledDate: form.scheduledDate,
       status: form.status,
-      videoLink: form.videoLink.trim() || undefined,
+      videoLink: normalizeExternalUrl(form.videoLink.trim()),
       notes: form.notes.trim() || undefined,
     };
     if (editing) await updateVideoRelease(editing.id, data);
@@ -263,7 +264,7 @@ function InHouseSection() {
       title: form.title.trim(),
       scheduledDate: form.scheduledDate,
       status: form.status,
-      videoLink: form.videoLink.trim() || undefined,
+      videoLink: normalizeExternalUrl(form.videoLink.trim()),
       cost: form.cost || undefined,
       notes: form.notes.trim() || undefined,
     };
@@ -335,7 +336,7 @@ function CampaignsSection() {
       scheduledDate: form.scheduledDate,
       description: form.description.trim() || undefined,
       cost: form.cost || undefined,
-      link: form.link.trim() || undefined,
+      link: normalizeExternalUrl(form.link.trim()),
       notes: form.notes.trim() || undefined,
     };
     if (editing) await updateCampaign(editing.id, data);

@@ -12,6 +12,7 @@ import {
   updateCollaboration,
 } from "@/lib/firestore";
 import type { CollabStatus, CollabType, Collaboration } from "@/lib/types";
+import { normalizeExternalUrl } from "@/lib/urls";
 
 const emptyForm = {
   creatorName: "",
@@ -58,11 +59,11 @@ export function CollabManager() {
     setSaveError(null);
     const payload = {
       creatorName: form.creatorName.trim(),
-      channelLink: form.channelLink.trim(),
+      channelLink: normalizeExternalUrl(form.channelLink.trim()) ?? "",
       type: form.type,
       cost: Number(form.cost) || 0,
       status: form.status,
-      videoLink: form.videoLink.trim() || undefined,
+      videoLink: normalizeExternalUrl(form.videoLink.trim()),
       scheduledDate: form.scheduledDate,
       notes: form.notes.trim() || undefined,
       createdAt: editing?.createdAt ?? new Date().toISOString(),
@@ -123,13 +124,15 @@ export function CollabManager() {
                 <td className="px-4 py-3 text-[var(--text-muted)]">{c.scheduledDate.slice(0, 10)}</td>
                 <td className="px-4 py-3">
                   {c.videoLink ? (
-                    <a href={c.videoLink} target="_blank" rel="noreferrer" className="link-teal hover:underline">
+                    <a href={normalizeExternalUrl(c.videoLink)!} target="_blank" rel="noreferrer" className="link-teal hover:underline">
                       Video
                     </a>
-                  ) : (
-                    <a href={c.channelLink} target="_blank" rel="noreferrer" className="link-teal hover:underline">
+                  ) : c.channelLink ? (
+                    <a href={normalizeExternalUrl(c.channelLink)!} target="_blank" rel="noreferrer" className="link-teal hover:underline">
                       Channel
                     </a>
+                  ) : (
+                    <span className="text-[var(--text-subtle)]">—</span>
                   )}
                 </td>
                 <td className="px-4 py-3">

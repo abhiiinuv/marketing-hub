@@ -5,6 +5,7 @@ import type { ChartPointWithEvents } from "@/lib/chartData";
 import { Modal } from "@/components/shared/Modal";
 import { Badge } from "@/components/shared/Badge";
 import { EVENT_TYPE_COLORS, EVENT_TYPE_LABELS, type ChartAnnotation } from "@/lib/types";
+import { normalizeExternalUrl } from "@/lib/urls";
 
 function formatDate(date: string) {
   try {
@@ -16,9 +17,12 @@ function formatDate(date: string) {
 
 function EventDetail({ event }: { event: ChartAnnotation }) {
   const links: { label: string; href: string }[] = [];
-  if (event.videoLink) links.push({ label: "Video", href: event.videoLink });
-  if (event.channelLink) links.push({ label: "Channel", href: event.channelLink });
-  if (event.link) links.push({ label: "Link", href: event.link });
+  const videoHref = normalizeExternalUrl(event.videoLink);
+  const channelHref = normalizeExternalUrl(event.channelLink);
+  const postHref = normalizeExternalUrl(event.link);
+  if (videoHref) links.push({ label: "Video", href: videoHref });
+  if (channelHref) links.push({ label: "Channel", href: channelHref });
+  if (postHref) links.push({ label: "Link", href: postHref });
 
   return (
     <article className="panel-subtle p-4">

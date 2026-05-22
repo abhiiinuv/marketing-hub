@@ -4,6 +4,7 @@ import { format, parseISO } from "date-fns";
 import { Modal } from "@/components/shared/Modal";
 import { Badge } from "@/components/shared/Badge";
 import { EVENT_TYPE_COLORS, EVENT_TYPE_LABELS, type CalendarEvent } from "@/lib/types";
+import { normalizeExternalUrl } from "@/lib/urls";
 
 function formatDayTitle(dateKey: string) {
   try {
@@ -15,9 +16,12 @@ function formatDayTitle(dateKey: string) {
 
 function EventCard({ event }: { event: CalendarEvent }) {
   const links: { label: string; href: string }[] = [];
-  if (event.videoLink) links.push({ label: "Video", href: event.videoLink });
-  if (event.channelLink) links.push({ label: "Channel", href: event.channelLink });
-  if (event.link) links.push({ label: "Link", href: event.link });
+  const videoHref = normalizeExternalUrl(event.videoLink);
+  const channelHref = normalizeExternalUrl(event.channelLink);
+  const postHref = normalizeExternalUrl(event.link);
+  if (videoHref) links.push({ label: "Video", href: videoHref });
+  if (channelHref) links.push({ label: "Channel", href: channelHref });
+  if (postHref) links.push({ label: "Link", href: postHref });
 
   return (
     <article className="panel-subtle p-4">
@@ -26,9 +30,9 @@ function EventCard({ event }: { event: CalendarEvent }) {
           className="h-2.5 w-2.5 rounded-full"
           style={{ background: EVENT_TYPE_COLORS[event.eventType] }}
         />
-        {event.channelLink ? (
+        {channelHref ? (
           <a
-            href={event.channelLink}
+            href={channelHref}
             target="_blank"
             rel="noreferrer"
             className="link-teal font-medium hover:underline"

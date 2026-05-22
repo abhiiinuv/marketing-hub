@@ -6,6 +6,7 @@ import { TrafficChart } from "@/components/traffic/TrafficChart";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { useMarketing } from "@/components/providers/MarketingProvider";
 import { EVENT_TYPE_COLORS, EVENT_TYPE_LABELS } from "@/lib/types";
+import { normalizeExternalUrl } from "@/lib/urls";
 
 export default function DashboardPage() {
   const { upcoming } = useMarketing();
@@ -49,7 +50,7 @@ export default function DashboardPage() {
                 <h3 className="line-clamp-2 font-medium text-white">
                   {e.channelLink ? (
                     <a
-                      href={e.channelLink}
+                      href={normalizeExternalUrl(e.channelLink)!}
                       target="_blank"
                       rel="noreferrer"
                       className="link-teal hover:underline"

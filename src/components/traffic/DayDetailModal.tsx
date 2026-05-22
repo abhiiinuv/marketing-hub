@@ -21,13 +21,13 @@ function EventDetail({ event }: { event: ChartAnnotation }) {
   if (event.link) links.push({ label: "Link", href: event.link });
 
   return (
-    <article className="rounded-lg border border-zinc-700 bg-zinc-950/60 p-4">
+    <article className="panel-subtle p-4">
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <span
           className="h-2.5 w-2.5 rounded-full"
           style={{ background: EVENT_TYPE_COLORS[event.eventType] }}
         />
-        <h3 className="font-semibold text-zinc-100">{event.title}</h3>
+        <h3 className="font-medium text-white">{event.title}</h3>
       </div>
       <div className="mb-2 flex flex-wrap gap-2">
         <Badge label={EVENT_TYPE_LABELS[event.eventType]} />
@@ -35,7 +35,7 @@ function EventDetail({ event }: { event: ChartAnnotation }) {
         {event.collabType && <Badge label={event.collabType} />}
       </div>
       {event.cost != null && (
-        <p className="text-sm text-zinc-400">Cost: ${event.cost.toLocaleString()}</p>
+        <p className="text-sm text-[var(--text-muted)]">Cost: ${event.cost.toLocaleString()}</p>
       )}
       {links.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-3">
@@ -45,7 +45,7 @@ function EventDetail({ event }: { event: ChartAnnotation }) {
               href={l.href}
               target="_blank"
               rel="noreferrer"
-              className="text-sm font-medium text-amber-400 hover:text-amber-300 hover:underline"
+              className="link-teal text-sm font-medium hover:underline"
             >
               {l.label} →
             </a>
@@ -53,7 +53,7 @@ function EventDetail({ event }: { event: ChartAnnotation }) {
         </div>
       )}
       {event.notes && (
-        <p className="mt-3 text-sm leading-relaxed text-zinc-400">{event.notes}</p>
+        <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)]">{event.notes}</p>
       )}
     </article>
   );
@@ -72,19 +72,19 @@ export function DayDetailModal({
 
   return (
     <Modal open={!!point} onClose={onClose} title={formatDate(point.date)}>
-      <p className="mb-4 text-sm text-zinc-400">
+      <p className="mb-4 text-sm text-[var(--text-muted)]">
         {metricLabel}:{" "}
-        <span className="text-lg font-semibold text-amber-400">
+        <span className="text-lg font-medium text-[var(--traycer-teal-light)]">
           {point.value != null ? point.value.toLocaleString() : "No traffic data"}
         </span>
       </p>
 
-      <h4 className="mb-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+      <h4 className="mb-3 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-subtle)]">
         Marketing activity
       </h4>
 
       {point.events.length === 0 ? (
-        <p className="rounded-lg border border-zinc-800 bg-zinc-950/40 px-4 py-6 text-center text-sm text-zinc-500">
+        <p className="panel-subtle px-4 py-6 text-center text-sm text-[var(--text-muted)]">
           Nothing scheduled on this day.
         </p>
       ) : (

@@ -41,10 +41,10 @@ export function ContentPlanner() {
             key={t.id}
             type="button"
             onClick={() => setTab(t.id)}
-            className={`rounded-lg px-4 py-2 text-sm font-medium ${
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
               tab === t.id
-                ? "bg-amber-500 text-zinc-950"
-                : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                ? "bg-[var(--traycer-teal-dark)]/50 text-white ring-1 ring-[var(--traycer-teal-muted)]/40"
+                : "bg-[var(--surface)] text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-white"
             }`}
           >
             {t.label}
@@ -72,13 +72,9 @@ function SectionShell({
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-zinc-100">{title}</h2>
+        <h2 className="font-serif text-xl text-white">{title}</h2>
         {canEdit ? (
-          <button
-            type="button"
-            onClick={onAdd}
-            className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-zinc-950"
-          >
+          <button type="button" onClick={onAdd} className="btn-primary text-sm">
             Add new
           </button>
         ) : (
@@ -413,7 +409,7 @@ function ItemList({
       {items.map((item) => (
         <div
           key={item.id}
-          className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900/40 px-4 py-3"
+          className="flex items-center justify-between panel px-4 py-3"
         >
           <div>
             <p className="font-medium text-zinc-100">{item.title}</p>
@@ -463,13 +459,13 @@ function GenericFields({
   return (
     <div>
       {fields.map((f) => (
-        <label key={f.key} className="mb-3 block text-sm text-zinc-300">
+        <label key={f.key} className="mb-3 block text-sm text-[var(--text-muted)]">
           {f.label}
           <input
             type={f.type ?? "text"}
             value={f.value}
             onChange={(e) => onChange(f.key, e.target.value)}
-            className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2"
+            className="input-field"
           />
         </label>
       ))}
@@ -500,7 +496,7 @@ function GenericFields({
           />
         </label>
       )}
-      <button type="button" onClick={onSave} className="w-full rounded-lg bg-amber-500 py-2 font-semibold text-zinc-950">
+      <button type="button" onClick={onSave} className="btn-primary w-full !py-2.5">
         Save
       </button>
     </div>

@@ -24,7 +24,7 @@ export function ChartDayDot({ cx, cy, payload, active, onSelect }: ChartDayDotPr
   if (!hasTraffic && events.length === 0) return null;
 
   const trafficR = active ? TRAFFIC_ACTIVE_RADIUS : TRAFFIC_RADIUS;
-  const baseY = hasTraffic ? cy : cy;
+  const baseY = cy;
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -38,8 +38,8 @@ export function ChartDayDot({ cx, cy, payload, active, onSelect }: ChartDayDotPr
           cx={cx}
           cy={baseY}
           r={trafficR}
-          fill={active ? "#fbbf24" : "#f59e0b"}
-          stroke={active ? "#ffffff" : "#f59e0b"}
+          fill={active ? "var(--chart-line-active)" : "var(--chart-line)"}
+          stroke={active ? "#ffffff" : "var(--chart-line)"}
           strokeWidth={active ? 2 : 1}
         />
       )}
@@ -53,7 +53,7 @@ export function ChartDayDot({ cx, cy, payload, active, onSelect }: ChartDayDotPr
             cy={eventY}
             r={EVENT_RADIUS}
             fill={EVENT_TYPE_COLORS[event.eventType]}
-            stroke="#18181b"
+            stroke="#000000"
             strokeWidth={1.5}
           />
         );

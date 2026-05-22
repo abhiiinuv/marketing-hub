@@ -78,16 +78,16 @@ export function CollabManager() {
           <button
             type="button"
             onClick={openCreate}
-            className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-amber-400"
+            className="btn-primary text-sm"
           >
             Add collaboration
           </button>
         </div>
       </RequireAdmin>
 
-      <div className="overflow-x-auto rounded-xl border border-zinc-800">
+      <div className="panel overflow-x-auto">
         <table className="w-full min-w-[800px] text-left text-sm">
-          <thead className="bg-zinc-900 text-xs uppercase text-zinc-500">
+          <thead className="border-b border-[var(--border)] bg-[var(--surface)] text-xs uppercase tracking-wider text-[var(--text-subtle)]">
             <tr>
               <th className="px-4 py-3">Creator</th>
               <th className="px-4 py-3">Type</th>
@@ -98,28 +98,28 @@ export function CollabManager() {
               <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-800">
+          <tbody className="divide-y divide-[var(--border)]">
             {collabs.map((c) => (
-              <tr key={c.id} className="bg-zinc-950/50 hover:bg-zinc-900/50">
+              <tr key={c.id} className="hover:bg-[var(--surface-hover)]/50">
                 <td className="px-4 py-3">
-                  <p className="font-medium text-zinc-100">{c.creatorName}</p>
-                  {c.notes && <p className="mt-0.5 text-xs text-zinc-500 line-clamp-1">{c.notes}</p>}
+                  <p className="font-medium text-white">{c.creatorName}</p>
+                  {c.notes && <p className="mt-0.5 text-xs text-[var(--text-subtle)] line-clamp-1">{c.notes}</p>}
                 </td>
                 <td className="px-4 py-3">
                   <Badge label={c.type} />
                 </td>
-                <td className="px-4 py-3 text-zinc-300">${c.cost.toLocaleString()}</td>
+                <td className="px-4 py-3 text-[var(--text-muted)]">${c.cost.toLocaleString()}</td>
                 <td className="px-4 py-3">
                   <Badge label={c.status} />
                 </td>
-                <td className="px-4 py-3 text-zinc-400">{c.scheduledDate.slice(0, 10)}</td>
+                <td className="px-4 py-3 text-[var(--text-muted)]">{c.scheduledDate.slice(0, 10)}</td>
                 <td className="px-4 py-3">
                   {c.videoLink ? (
-                    <a href={c.videoLink} target="_blank" rel="noreferrer" className="text-amber-400 hover:underline">
+                    <a href={c.videoLink} target="_blank" rel="noreferrer" className="link-teal hover:underline">
                       Video
                     </a>
                   ) : (
-                    <a href={c.channelLink} target="_blank" rel="noreferrer" className="text-amber-400 hover:underline">
+                    <a href={c.channelLink} target="_blank" rel="noreferrer" className="link-teal hover:underline">
                       Channel
                     </a>
                   )}
@@ -127,7 +127,7 @@ export function CollabManager() {
                 <td className="px-4 py-3">
                   {canEdit ? (
                     <div className="flex gap-2">
-                      <button type="button" onClick={() => openEdit(c)} className="text-zinc-400 hover:text-zinc-100">
+                      <button type="button" onClick={() => openEdit(c)} className="text-[var(--text-muted)] hover:text-white">
                         Edit
                       </button>
                       <button
@@ -172,7 +172,7 @@ function CollabForm({
   onSave: () => void;
 }) {
   const field = (label: string, key: keyof typeof emptyForm, type = "text") => (
-    <label className="mb-3 block text-sm text-zinc-300">
+    <label className="mb-3 block text-sm text-[var(--text-muted)]">
       {label}
       <input
         type={type}
@@ -183,7 +183,7 @@ function CollabForm({
             [key]: type === "number" ? Number(e.target.value) : e.target.value,
           })
         }
-        className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100"
+        className="input-field"
       />
     </label>
   );
@@ -192,24 +192,24 @@ function CollabForm({
     <div>
       {field("Creator name", "creatorName")}
       {field("YouTube channel link", "channelLink")}
-      <label className="mb-3 block text-sm text-zinc-300">
+      <label className="mb-3 block text-sm text-[var(--text-muted)]">
         Type
         <select
           value={form.type}
           onChange={(e) => setForm({ ...form, type: e.target.value as CollabType })}
-          className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2"
+          className="input-field"
         >
           <option value="dedicated">Dedicated video</option>
           <option value="integration">Integration</option>
         </select>
       </label>
       {field("Cost ($)", "cost", "number")}
-      <label className="mb-3 block text-sm text-zinc-300">
+      <label className="mb-3 block text-sm text-[var(--text-muted)]">
         Status
         <select
           value={form.status}
           onChange={(e) => setForm({ ...form, status: e.target.value as CollabStatus })}
-          className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2"
+          className="input-field"
         >
           <option value="planned">Planned</option>
           <option value="in_progress">In progress</option>
@@ -225,13 +225,13 @@ function CollabForm({
           value={form.notes}
           onChange={(e) => setForm({ ...form, notes: e.target.value })}
           rows={3}
-          className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2"
+          className="input-field"
         />
       </label>
       <button
         type="button"
         onClick={onSave}
-        className="w-full rounded-lg bg-amber-500 py-2 font-semibold text-zinc-950 hover:bg-amber-400"
+        className="btn-primary w-full !py-2.5"
       >
         Save
       </button>

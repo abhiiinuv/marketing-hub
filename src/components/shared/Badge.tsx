@@ -1,19 +1,19 @@
 const STATUS_STYLES: Record<string, string> = {
-  planned: "bg-zinc-700 text-zinc-200",
-  in_progress: "bg-blue-500/20 text-blue-300",
-  in_production: "bg-blue-500/20 text-blue-300",
-  live: "bg-emerald-500/20 text-emerald-300",
-  completed: "bg-zinc-600 text-zinc-300",
-  draft: "bg-zinc-700 text-zinc-300",
-  scheduled: "bg-amber-500/20 text-amber-300",
-  posted: "bg-emerald-500/20 text-emerald-300",
-  dedicated: "bg-violet-500/20 text-violet-300",
-  integration: "bg-cyan-500/20 text-cyan-300",
+  planned: "bg-[var(--surface-hover)] text-[var(--text-muted)] border border-[var(--border)]",
+  in_progress: "bg-[var(--traycer-teal-dark)]/30 text-[var(--traycer-teal-light)] border border-[var(--traycer-teal-muted)]/40",
+  in_production: "bg-[var(--traycer-teal-dark)]/30 text-[var(--traycer-teal-light)] border border-[var(--traycer-teal-muted)]/40",
+  live: "bg-emerald-950/50 text-emerald-300 border border-emerald-800/50",
+  completed: "bg-[var(--surface-hover)] text-[var(--text-subtle)] border border-[var(--border)]",
+  draft: "bg-[var(--surface-hover)] text-[var(--text-muted)] border border-[var(--border)]",
+  scheduled: "bg-[var(--traycer-teal-dark)]/20 text-[var(--traycer-teal-light)] border border-[var(--traycer-teal-muted)]/30",
+  posted: "bg-emerald-950/50 text-emerald-300 border border-emerald-800/50",
+  dedicated: "bg-violet-950/40 text-violet-300 border border-violet-800/40",
+  integration: "bg-cyan-950/40 text-cyan-300 border border-cyan-800/40",
 };
 
 export function Badge({ label }: { label: string }) {
   const key = label.toLowerCase().replace(/\s+/g, "_");
-  const style = STATUS_STYLES[key] ?? "bg-zinc-700 text-zinc-300";
+  const style = STATUS_STYLES[key] ?? "bg-[var(--surface-hover)] text-[var(--text-muted)] border border-[var(--border)]";
   return (
     <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${style}`}>
       {label.replace(/_/g, " ")}

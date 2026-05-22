@@ -25,21 +25,21 @@ export function DayChartTooltip({
   })();
 
   return (
-    <div className="max-w-sm rounded-lg border border-zinc-600 bg-zinc-900 p-3 text-sm shadow-xl">
-      <p className="font-semibold text-zinc-50">{dateLabel}</p>
-      <p className="mt-1 text-amber-400">
+    <div className="max-w-sm rounded-lg border border-[var(--border)] bg-[var(--surface-elevated)] p-3 text-sm shadow-2xl">
+      <p className="font-serif text-base text-white">{dateLabel}</p>
+      <p className="mt-1 text-[var(--traycer-teal-light)]">
         {metricLabel}:{" "}
-        <span className="font-medium text-zinc-100">
+        <span className="font-medium text-white">
           {point.value != null ? point.value.toLocaleString() : "—"}
         </span>
       </p>
 
-      <div className="mt-3 border-t border-zinc-700 pt-2">
-        <p className="mb-1.5 text-xs font-medium uppercase tracking-wide text-zinc-500">
+      <div className="mt-3 border-t border-[var(--border)] pt-2">
+        <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-subtle)]">
           What happened
         </p>
         {point.events.length === 0 ? (
-          <p className="text-zinc-500">No marketing events on this day.</p>
+          <p className="text-[var(--text-muted)]">No marketing events on this day.</p>
         ) : (
           <>
             <ul className="space-y-2">
@@ -50,13 +50,15 @@ export function DayChartTooltip({
                     style={{ background: EVENT_TYPE_COLORS[e.eventType] }}
                   />
                   <div>
-                    <p className="font-medium text-zinc-100">{e.title}</p>
-                    <p className="text-xs text-zinc-400">{EVENT_TYPE_LABELS[e.eventType]}</p>
+                    <p className="font-medium text-white">{e.title}</p>
+                    <p className="text-xs text-[var(--text-muted)]">
+                      {EVENT_TYPE_LABELS[e.eventType]}
+                    </p>
                   </div>
                 </li>
               ))}
             </ul>
-            <p className="mt-2 text-xs text-zinc-500">Click for full details and links</p>
+            <p className="mt-2 text-xs text-[var(--text-subtle)]">Click for full details and links</p>
           </>
         )}
       </div>

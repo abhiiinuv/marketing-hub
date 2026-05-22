@@ -22,27 +22,27 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex w-56 shrink-0 flex-col border-r border-zinc-800 bg-zinc-950 px-3 py-6">
-      <div className="mb-8 px-2">
-        <p className="text-xs font-semibold uppercase tracking-widest text-amber-500">
+    <aside className="relative z-20 flex w-56 shrink-0 flex-col border-r border-[var(--border)] bg-black/80 px-3 py-8 backdrop-blur-sm">
+      <div className="mb-10 px-2">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[var(--traycer-teal-light)]">
           Internal
         </p>
-        <h1 className="text-lg font-bold text-zinc-50">Marketing Hub</h1>
+        <h1 className="font-serif mt-1 text-xl font-normal text-white">Marketing Hub</h1>
       </div>
-      <nav className="flex flex-1 flex-col gap-1">
+      <nav className="flex flex-1 flex-col gap-0.5">
         {links.map(({ href, label, icon: Icon }) => {
           const active = pathname === href;
           return (
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              className={`flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                 active
-                  ? "bg-amber-500/15 text-amber-400"
-                  : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100"
+                  ? "bg-[var(--traycer-teal-dark)]/40 text-white ring-1 ring-[var(--traycer-teal-muted)]/50"
+                  : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-white"
               }`}
             >
-              <Icon className="text-base opacity-80" />
+              <Icon className="text-sm opacity-80" />
               {label}
             </Link>
           );

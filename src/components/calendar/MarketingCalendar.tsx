@@ -21,7 +21,7 @@ import { Badge } from "@/components/shared/Badge";
 
 function EventDetail({ event }: { event: CalendarEvent }) {
   return (
-    <div className="rounded-lg border border-zinc-700 bg-zinc-900 p-4 text-sm">
+    <div className="panel-subtle p-4 text-sm">
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <span
           className="h-2 w-2 rounded-full"
@@ -37,17 +37,17 @@ function EventDetail({ event }: { event: CalendarEvent }) {
         <p className="mt-1 text-zinc-300">Cost: ${event.cost.toLocaleString()}</p>
       )}
       {event.videoLink && (
-        <a href={event.videoLink} target="_blank" rel="noreferrer" className="mt-2 block text-amber-400 hover:underline">
+        <a href={event.videoLink} target="_blank" rel="noreferrer" className="link-teal mt-2 block hover:underline">
           Video link
         </a>
       )}
       {event.channelLink && (
-        <a href={event.channelLink} target="_blank" rel="noreferrer" className="mt-1 block text-amber-400 hover:underline">
+        <a href={event.channelLink} target="_blank" rel="noreferrer" className="link-teal mt-1 block hover:underline">
           Channel link
         </a>
       )}
       {event.link && (
-        <a href={event.link} target="_blank" rel="noreferrer" className="mt-1 block text-amber-400 hover:underline">
+        <a href={event.link} target="_blank" rel="noreferrer" className="link-teal mt-1 block hover:underline">
           Post link
         </a>
       )}
@@ -72,37 +72,37 @@ export function MarketingCalendar() {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-zinc-50">
+        <h2 className="font-serif text-2xl font-normal text-white">
           {format(month, "MMMM yyyy")}
         </h2>
         <div className="flex gap-2">
           <button
             type="button"
             onClick={() => setMonth((m) => subMonths(m, 1))}
-            className="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-800"
+            className="btn-secondary !py-1.5 !text-sm"
           >
             Previous
           </button>
           <button
             type="button"
             onClick={() => setMonth(startOfMonth(new Date()))}
-            className="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-800"
+            className="btn-secondary !py-1.5 !text-sm"
           >
             Today
           </button>
           <button
             type="button"
             onClick={() => setMonth((m) => addMonths(m, 1))}
-            className="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-800"
+            className="btn-secondary !py-1.5 !text-sm"
           >
             Next
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-px overflow-hidden rounded-xl border border-zinc-800 bg-zinc-800">
+      <div className="panel grid grid-cols-7 gap-px overflow-hidden p-px">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-          <div key={d} className="bg-zinc-950 px-2 py-2 text-center text-xs font-medium text-zinc-500">
+          <div key={d} className="bg-[var(--surface)] px-2 py-2 text-center text-xs font-medium text-[var(--text-subtle)]">
             {d}
           </div>
         ))}
@@ -117,11 +117,11 @@ export function MarketingCalendar() {
               key={key}
               type="button"
               onClick={() => events[0] && setSelected(events[0])}
-              className={`min-h-[88px] bg-zinc-950 p-1.5 text-left transition-colors hover:bg-zinc-900 ${
+              className={`min-h-[88px] bg-black p-1.5 text-left transition-colors hover:bg-[var(--surface-hover)] ${
                 !inMonth ? "opacity-40" : ""
-              } ${isToday ? "ring-1 ring-inset ring-amber-500/50" : ""}`}
+              } ${isToday ? "ring-1 ring-inset ring-[var(--traycer-teal-muted)]" : ""}`}
             >
-              <span className={`text-xs ${isToday ? "font-bold text-amber-400" : "text-zinc-400"}`}>
+              <span className={`text-xs ${isToday ? "font-bold text-[var(--traycer-teal-light)]" : "text-[var(--text-muted)]"}`}>
                 {format(day, "d")}
               </span>
               <div className="mt-1 space-y-0.5">
@@ -164,7 +164,7 @@ export function MarketingCalendar() {
                 key={e.id}
                 type="button"
                 onClick={() => setSelected(e)}
-                className="flex w-full items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-left hover:border-zinc-600"
+                className="flex w-full items-center gap-3 panel px-4 py-3 text-left transition-colors hover:border-[var(--traycer-teal-muted)]/40"
               >
                 <span
                   className="h-3 w-3 shrink-0 rounded-full"

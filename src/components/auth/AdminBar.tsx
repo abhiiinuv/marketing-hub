@@ -31,69 +31,58 @@ export function AdminBar() {
   return (
     <>
       <div
-        className={`mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border px-4 py-3 text-sm ${
-          canEdit
-            ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-100"
-            : "border-zinc-700 bg-zinc-900/80 text-zinc-400"
+        className={`panel-subtle mb-6 flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm ${
+          canEdit ? "ring-1 ring-[var(--traycer-teal-muted)]/30" : ""
         }`}
       >
-        <div>
+        <div className="text-[var(--text-muted)]">
           {canEdit ? (
             <>
-              <span className="font-medium text-emerald-300">Admin mode</span>
-              <span className="ml-2 text-zinc-400">— signed in as {user?.email}</span>
+              <span className="font-medium text-[var(--traycer-teal-light)]">Admin mode</span>
+              <span className="ml-2">— {user?.email}</span>
             </>
           ) : (
             <>
-              <span className="font-medium text-zinc-200">View-only</span>
+              <span className="font-medium text-white">View-only</span>
               <span className="ml-2">
-                Anyone can browse the calendar and charts. Sign in to add or edit data.
+                Browse freely. Sign in to add or edit marketing data.
               </span>
             </>
           )}
         </div>
         {canEdit ? (
-          <button
-            type="button"
-            onClick={() => signOut()}
-            className="rounded-lg border border-zinc-600 px-3 py-1.5 text-zinc-200 hover:bg-zinc-800"
-          >
+          <button type="button" onClick={() => signOut()} className="btn-secondary">
             Sign out
           </button>
         ) : (
-          <button
-            type="button"
-            onClick={() => setLoginOpen(true)}
-            className="rounded-lg bg-amber-500 px-3 py-1.5 font-semibold text-zinc-950 hover:bg-amber-400"
-          >
+          <button type="button" onClick={() => setLoginOpen(true)} className="btn-primary">
             Admin sign in
           </button>
         )}
       </div>
 
       <Modal open={loginOpen} onClose={() => setLoginOpen(false)} title="Admin sign in">
-        <p className="mb-4 text-sm text-zinc-400">
-          Use the same email and password as Creatorboard admin. Firebase Email/Password must be
-          enabled in your project.
+        <p className="mb-4 text-sm text-[var(--text-muted)]">
+          Use the same email and password as Creatorboard admin.
         </p>
-        <label className="mb-3 block text-sm text-zinc-300">
+        <label className="mb-3 block text-sm text-[var(--text-muted)]">
           Email
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2"
+            className="input-field"
             autoComplete="username"
           />
         </label>
-        <label className="mb-3 block text-sm text-zinc-300">
+        <label className="mb-3 block text-sm text-[var(--text-muted)]">
           Password
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleLogin()}
-            className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2"
+            className="input-field"
             autoComplete="current-password"
           />
         </label>
@@ -102,7 +91,7 @@ export function AdminBar() {
           type="button"
           disabled={submitting}
           onClick={handleLogin}
-          className="w-full rounded-lg bg-amber-500 py-2 font-semibold text-zinc-950 hover:bg-amber-400 disabled:opacity-50"
+          className="btn-primary w-full !py-2.5"
         >
           {submitting ? "Signing in…" : "Sign in"}
         </button>

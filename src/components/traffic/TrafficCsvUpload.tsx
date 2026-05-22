@@ -40,11 +40,11 @@ export function TrafficCsvUpload() {
   const latest = trafficUploads[0];
 
   return (
-    <div className="max-w-xl rounded-xl border border-zinc-800 bg-zinc-900/40 p-6">
-      <label className="block text-sm font-medium text-zinc-200">Traffic CSV</label>
-      <p className="mt-1 mb-4 text-sm text-zinc-500">
-        Supports date-per-row exports or wide formats (dates as columns, e.g. Unique Sessions
-        trend). The dashboard chart updates automatically for everyone.
+    <div className="panel max-w-xl p-6">
+      <label className="block text-sm font-medium text-white">Traffic CSV</label>
+      <p className="mt-1 mb-4 text-sm leading-relaxed text-[var(--text-muted)]">
+        Supports date-per-row exports or wide formats (dates as columns). The dashboard chart
+        updates automatically for everyone.
       </p>
       <input
         type="file"
@@ -55,14 +55,16 @@ export function TrafficCsvUpload() {
           if (f) handleFile(f);
           e.target.value = "";
         }}
-        className="block w-full text-sm text-zinc-400 file:mr-4 file:rounded-lg file:border-0 file:bg-amber-500 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-zinc-950 disabled:opacity-50"
+        className="block w-full text-sm text-[var(--text-muted)] file:mr-4 file:rounded-lg file:border-0 file:bg-white file:px-4 file:py-2 file:text-sm file:font-semibold file:text-black disabled:opacity-50"
       />
       {!canEdit && (
-        <p className="mt-3 text-sm text-zinc-500">Sign in as admin to upload or replace CSV data.</p>
+        <p className="mt-3 text-sm text-[var(--text-subtle)]">
+          Sign in as admin to upload or replace CSV data.
+        </p>
       )}
       {latest && (
-        <p className="mt-4 text-sm text-zinc-400">
-          Current file: <span className="text-zinc-200">{latest.filename}</span> ({latest.rows.length}{" "}
+        <p className="mt-4 text-sm text-[var(--text-muted)]">
+          Current file: <span className="text-white">{latest.filename}</span> ({latest.rows.length}{" "}
           days)
         </p>
       )}
@@ -70,13 +72,13 @@ export function TrafficCsvUpload() {
         <button
           type="button"
           onClick={() => deleteTrafficUpload(latest.id)}
-          className="mt-3 text-sm text-red-400 hover:text-red-300"
+          className="mt-3 text-sm text-red-400/90 hover:text-red-300"
         >
           Remove current dataset
         </button>
       )}
       {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
-      {success && <p className="mt-3 text-sm text-emerald-400">{success}</p>}
+      {success && <p className="mt-3 text-sm text-[var(--traycer-teal-light)]">{success}</p>}
     </div>
   );
 }

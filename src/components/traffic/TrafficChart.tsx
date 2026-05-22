@@ -15,17 +15,20 @@ import { useTrafficChartData } from "@/hooks/useTrafficChartData";
 import { DayChartTooltip } from "./DayChartTooltip";
 import { DayDetailModal } from "./DayDetailModal";
 import { ChartDayDot, CHART_TOP_MARGIN } from "./ChartDayDot";
+import { EventLegend } from "./EventLegend";
 import type { ChartPointWithEvents } from "@/lib/chartData";
 
 type TrafficChartProps = {
   height?: number;
   showControls?: boolean;
+  showLegend?: boolean;
   emptyMessage?: string;
 };
 
 export function TrafficChart({
-  height = 480,
+  height = 520,
   showControls = true,
+  showLegend = true,
   emptyMessage = "Upload a CSV in Data Upload to see traffic here.",
 }: TrafficChartProps) {
   const {
@@ -63,12 +66,12 @@ export function TrafficChart({
   if (!activeUpload) {
     return (
       <div
-        className="flex items-center justify-center rounded-xl border border-dashed border-zinc-700 text-zinc-500"
+        className="panel-subtle flex items-center justify-center text-[var(--text-muted)]"
         style={{ height }}
       >
         <p className="max-w-md px-4 text-center text-sm">
           {emptyMessage}{" "}
-          <Link href="/traffic" className="text-amber-400 hover:underline">
+          <Link href="/traffic" className="link-teal hover:underline">
             Data Upload →
           </Link>
         </p>
@@ -79,7 +82,7 @@ export function TrafficChart({
   if (!hasTrafficValues) {
     return (
       <div
-        className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-zinc-700 text-zinc-500"
+        className="panel-subtle flex flex-col items-center justify-center gap-2 text-[var(--text-muted)]"
         style={{ height }}
       >
         <p>Dataset loaded ({activeUpload.rows.length} rows) but no values for this metric.</p>
@@ -93,14 +96,14 @@ export function TrafficChart({
   return (
     <div>
       {showControls && trafficUploads.length > 0 && (
-        <div className="mb-3 flex flex-wrap items-center gap-3">
+        <div className="mb-4 flex flex-wrap items-center gap-4">
           {trafficUploads.length > 1 && (
-            <label className="text-sm text-zinc-400">
+            <label className="text-sm text-[var(--text-muted)]">
               Dataset
               <select
                 value={activeUpload.id}
                 onChange={(e) => setSelectedUploadId(e.target.value)}
-                className="ml-2 rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-1 text-zinc-200"
+                className="input-field ml-2 !mt-0 inline-block w-auto py-1.5"
               >
                 {trafficUploads.map((u) => (
                   <option key={u.id} value={u.id}>
@@ -111,12 +114,12 @@ export function TrafficChart({
             </label>
           )}
           {availableMetrics.length > 1 && (
-            <label className="text-sm text-zinc-400">
+            <label className="text-sm text-[var(--text-muted)]">
               Metric
               <select
                 value={availableMetrics.includes(metric) ? metric : availableMetrics[0]}
                 onChange={(e) => setMetric(e.target.value)}
-                className="ml-1 rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-1 text-zinc-200"
+                className="input-field ml-2 !mt-0 inline-block w-auto py-1.5"
               >
                 {availableMetrics.map((m) => (
                   <option key={m} value={m}>
@@ -126,39 +129,44 @@ export function TrafficChart({
               </select>
             </label>
           )}
-          <span className="text-xs text-zinc-500">
-            Amber = sessions · Colored dots above = marketing events · Hover or click for details
+          <span className="text-xs text-[var(--text-subtle)]">
+            Hover for preview · Click for full details
           </span>
         </div>
       )}
 
-      <div
-        className="w-full rounded-xl border border-zinc-800 bg-zinc-950 p-2"
-        style={{ height }}
-      >
+      {showLegend && <EventLegend />}
+
+      <div className="panel overflow-hidden p-3" style={{ height }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={chartData}
             margin={{ top: CHART_TOP_MARGIN, right: 24, left: 8, bottom: 56 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
             <XAxis
               dataKey="date"
-              tick={{ fill: "#a1a1aa", fontSize: 10 }}
+              tick={{ fill: "#737373", fontSize: 10 }}
               angle={-35}
               textAnchor="end"
               height={56}
               interval="preserveStartEnd"
+              axisLine={{ stroke: "var(--border)" }}
+              tickLine={{ stroke: "var(--border)" }}
             />
-            <YAxis tick={{ fill: "#a1a1aa", fontSize: 11 }} />
+            <YAxis
+              tick={{ fill: "#737373", fontSize: 11 }}
+              axisLine={{ stroke: "var(--border)" }}
+              tickLine={{ stroke: "var(--border)" }}
+            />
             <Tooltip
               content={<DayChartTooltip metricLabel={metricLabel} />}
-              cursor={{ stroke: "#52525b", strokeWidth: 1 }}
+              cursor={{ stroke: "var(--traycer-teal-muted)", strokeWidth: 1 }}
             />
             <Line
               type="monotone"
               dataKey="value"
-              stroke="#f59e0b"
+              stroke="var(--chart-line)"
               strokeWidth={2}
               connectNulls={false}
               dot={renderDot}

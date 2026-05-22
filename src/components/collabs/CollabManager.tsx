@@ -30,14 +30,17 @@ export function CollabManager() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Collaboration | null>(null);
   const [form, setForm] = useState(emptyForm);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const openCreate = () => {
     setEditing(null);
     setForm(emptyForm);
+    setSaveError(null);
     setOpen(true);
   };
 
   const openEdit = (c: Collaboration) => {
     setEditing(c);
+    setSaveError(null);
     setForm({
       creatorName: c.creatorName,
       channelLink: c.channelLink,
@@ -52,6 +55,7 @@ export function CollabManager() {
   };
 
   const save = async () => {
+    setSaveError(null);
     const payload = {
       creatorName: form.creatorName.trim(),
       channelLink: form.channelLink.trim(),
@@ -63,12 +67,16 @@ export function CollabManager() {
       notes: form.notes.trim() || undefined,
       createdAt: editing?.createdAt ?? new Date().toISOString(),
     };
-    if (editing) {
-      await updateCollaboration(editing.id, payload);
-    } else {
-      await addCollaboration(payload);
+    try {
+      if (editing) {
+        await updateCollaboration(editing.id, payload);
+      } else {
+        await addCollaboration(payload);
+      }
+      setOpen(false);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Could not save collaboration.");
     }
-    setOpen(false);
   };
 
   return (
@@ -156,7 +164,7 @@ export function CollabManager() {
       </div>
 
       <Modal open={open} onClose={() => setOpen(false)} title={editing ? "Edit collaboration" : "New collaboration"}>
-        <CollabForm form={form} setForm={setForm} onSave={save} />
+        <CollabForm form={form} setForm={setForm} onSave={save} saveError={saveError} />
       </Modal>
     </div>
   );
@@ -166,10 +174,12 @@ function CollabForm({
   form,
   setForm,
   onSave,
+  saveError,
 }: {
   form: typeof emptyForm;
   setForm: (f: typeof emptyForm) => void;
   onSave: () => void;
+  saveError: string | null;
 }) {
   const field = (label: string, key: keyof typeof emptyForm, type = "text") => (
     <label className="mb-3 block text-sm text-[var(--text-muted)]">
@@ -228,6 +238,9 @@ function CollabForm({
           className="input-field"
         />
       </label>
+      {saveError && (
+        <p className="mb-3 text-sm text-red-400">{saveError}</p>
+      )}
       <button
         type="button"
         onClick={onSave}

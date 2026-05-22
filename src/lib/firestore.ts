@@ -2,12 +2,15 @@ import {
   addDoc,
   collection,
   deleteDoc,
+  deleteField,
   doc,
   onSnapshot,
   orderBy,
   query,
   updateDoc,
+  type DocumentData,
   type Unsubscribe,
+  type UpdateData,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import type {
@@ -18,6 +21,22 @@ import type {
   TrafficUpload,
   VideoRelease,
 } from "./types";
+
+function stripUndefined<T extends Record<string, unknown>>(data: T): T {
+  return Object.fromEntries(
+    Object.entries(data).filter(([, value]) => value !== undefined)
+  ) as T;
+}
+
+function prepareUpdate<T extends Record<string, unknown>>(
+  data: Partial<T>
+): UpdateData<DocumentData> {
+  const result: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(data)) {
+    result[key] = value === undefined ? deleteField() : value;
+  }
+  return result as UpdateData<DocumentData>;
+}
 
 export const COLLECTIONS = {
   socialPosts: "socialPosts",
@@ -63,11 +82,11 @@ export const subscribeTrafficUploads = (cb: (items: TrafficUpload[]) => void) =>
 };
 
 export async function addSocialPost(data: Omit<SocialPost, "id">) {
-  return addDoc(collection(db, COLLECTIONS.socialPosts), data);
+  return addDoc(collection(db, COLLECTIONS.socialPosts), stripUndefined(data));
 }
 
 export async function updateSocialPost(id: string, data: Partial<SocialPost>) {
-  return updateDoc(doc(db, COLLECTIONS.socialPosts, id), data);
+  return updateDoc(doc(db, COLLECTIONS.socialPosts, id), prepareUpdate(data));
 }
 
 export async function deleteSocialPost(id: string) {
@@ -75,11 +94,11 @@ export async function deleteSocialPost(id: string) {
 }
 
 export async function addVideoRelease(data: Omit<VideoRelease, "id">) {
-  return addDoc(collection(db, COLLECTIONS.videoReleases), data);
+  return addDoc(collection(db, COLLECTIONS.videoReleases), stripUndefined(data));
 }
 
 export async function updateVideoRelease(id: string, data: Partial<VideoRelease>) {
-  return updateDoc(doc(db, COLLECTIONS.videoReleases, id), data);
+  return updateDoc(doc(db, COLLECTIONS.videoReleases, id), prepareUpdate(data));
 }
 
 export async function deleteVideoRelease(id: string) {
@@ -87,11 +106,11 @@ export async function deleteVideoRelease(id: string) {
 }
 
 export async function addInHouseVideo(data: Omit<InHouseVideo, "id">) {
-  return addDoc(collection(db, COLLECTIONS.inHouseVideos), data);
+  return addDoc(collection(db, COLLECTIONS.inHouseVideos), stripUndefined(data));
 }
 
 export async function updateInHouseVideo(id: string, data: Partial<InHouseVideo>) {
-  return updateDoc(doc(db, COLLECTIONS.inHouseVideos, id), data);
+  return updateDoc(doc(db, COLLECTIONS.inHouseVideos, id), prepareUpdate(data));
 }
 
 export async function deleteInHouseVideo(id: string) {
@@ -99,11 +118,11 @@ export async function deleteInHouseVideo(id: string) {
 }
 
 export async function addCollaboration(data: Omit<Collaboration, "id">) {
-  return addDoc(collection(db, COLLECTIONS.collaborations), data);
+  return addDoc(collection(db, COLLECTIONS.collaborations), stripUndefined(data));
 }
 
 export async function updateCollaboration(id: string, data: Partial<Collaboration>) {
-  return updateDoc(doc(db, COLLECTIONS.collaborations, id), data);
+  return updateDoc(doc(db, COLLECTIONS.collaborations, id), prepareUpdate(data));
 }
 
 export async function deleteCollaboration(id: string) {
@@ -111,11 +130,11 @@ export async function deleteCollaboration(id: string) {
 }
 
 export async function addCampaign(data: Omit<Campaign, "id">) {
-  return addDoc(collection(db, COLLECTIONS.campaigns), data);
+  return addDoc(collection(db, COLLECTIONS.campaigns), stripUndefined(data));
 }
 
 export async function updateCampaign(id: string, data: Partial<Campaign>) {
-  return updateDoc(doc(db, COLLECTIONS.campaigns, id), data);
+  return updateDoc(doc(db, COLLECTIONS.campaigns, id), prepareUpdate(data));
 }
 
 export async function deleteCampaign(id: string) {

@@ -46,7 +46,20 @@ export default function DashboardPage() {
                     {EVENT_TYPE_LABELS[e.eventType]}
                   </span>
                 </div>
-                <h3 className="line-clamp-2 font-medium text-white">{e.title}</h3>
+                <h3 className="line-clamp-2 font-medium text-white">
+                  {e.channelLink ? (
+                    <a
+                      href={e.channelLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="link-teal hover:underline"
+                    >
+                      {e.title}
+                    </a>
+                  ) : (
+                    e.title
+                  )}
+                </h3>
                 <p className="mt-2 text-sm text-[var(--traycer-teal-light)]">
                   {format(parseISO(e.date), "MMM d, yyyy")}
                 </p>

@@ -15,53 +15,19 @@ import {
   subMonths,
 } from "date-fns";
 import { useMarketing } from "@/components/providers/MarketingProvider";
+import { CalendarDayModal } from "@/components/calendar/CalendarDayModal";
 import { groupEventsByDate } from "@/lib/calendar";
-import { EVENT_TYPE_COLORS, EVENT_TYPE_LABELS, type CalendarEvent } from "@/lib/types";
-import { Badge } from "@/components/shared/Badge";
+import { EVENT_TYPE_COLORS, EVENT_TYPE_LABELS } from "@/lib/types";
 
-function EventDetail({ event }: { event: CalendarEvent }) {
-  return (
-    <div className="panel-subtle p-4 text-sm">
-      <div className="mb-2 flex flex-wrap items-center gap-2">
-        <span
-          className="h-2 w-2 rounded-full"
-          style={{ background: EVENT_TYPE_COLORS[event.eventType] }}
-        />
-        <span className="font-semibold text-zinc-100">{event.title}</span>
-        <Badge label={EVENT_TYPE_LABELS[event.eventType]} />
-        {event.status && <Badge label={event.status} />}
-        {event.collabType && <Badge label={event.collabType} />}
-      </div>
-      <p className="text-zinc-400">{format(parseISO(event.date), "PPP")}</p>
-      {event.cost != null && (
-        <p className="mt-1 text-zinc-300">Cost: ${event.cost.toLocaleString()}</p>
-      )}
-      {event.videoLink && (
-        <a href={event.videoLink} target="_blank" rel="noreferrer" className="link-teal mt-2 block hover:underline">
-          Video link
-        </a>
-      )}
-      {event.channelLink && (
-        <a href={event.channelLink} target="_blank" rel="noreferrer" className="link-teal mt-1 block hover:underline">
-          Channel link
-        </a>
-      )}
-      {event.link && (
-        <a href={event.link} target="_blank" rel="noreferrer" className="link-teal mt-1 block hover:underline">
-          Post link
-        </a>
-      )}
-      {event.notes && <p className="mt-2 text-zinc-400">{event.notes}</p>}
-    </div>
-  );
-}
+const VISIBLE_EVENTS_PER_DAY = 2;
 
 export function MarketingCalendar() {
   const { calendarEvents } = useMarketing();
   const [month, setMonth] = useState(() => startOfMonth(new Date()));
-  const [selected, setSelected] = useState<CalendarEvent | null>(null);
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
 
   const byDate = useMemo(() => groupEventsByDate(calendarEvents), [calendarEvents]);
+  const selectedDayEvents = selectedDay ? (byDate.get(selectedDay) ?? []) : [];
 
   const days = useMemo(() => {
     const start = startOfWeek(startOfMonth(month));
@@ -111,21 +77,27 @@ export function MarketingCalendar() {
           const events = byDate.get(key) ?? [];
           const inMonth = isSameMonth(day, month);
           const isToday = isSameDay(day, new Date());
+          const hiddenCount = Math.max(0, events.length - VISIBLE_EVENTS_PER_DAY);
 
           return (
             <button
               key={key}
               type="button"
-              onClick={() => events[0] && setSelected(events[0])}
+              onClick={() => setSelectedDay(key)}
               className={`min-h-[88px] bg-black p-1.5 text-left transition-colors hover:bg-[var(--surface-hover)] ${
                 !inMonth ? "opacity-40" : ""
               } ${isToday ? "ring-1 ring-inset ring-[var(--traycer-teal-muted)]" : ""}`}
+              aria-label={
+                hiddenCount > 0
+                  ? `${format(day, "MMMM d")}, ${events.length} events, click to view all`
+                  : `${format(day, "MMMM d")}, click to view events`
+              }
             >
               <span className={`text-xs ${isToday ? "font-bold text-[var(--traycer-teal-light)]" : "text-[var(--text-muted)]"}`}>
                 {format(day, "d")}
               </span>
               <div className="mt-1 space-y-0.5">
-                {events.slice(0, 3).map((e) => (
+                {events.slice(0, VISIBLE_EVENTS_PER_DAY).map((e) => (
                   <div
                     key={e.id}
                     className="truncate rounded px-1 py-0.5 text-[10px] font-medium text-zinc-900"
@@ -135,8 +107,10 @@ export function MarketingCalendar() {
                     {e.title}
                   </div>
                 ))}
-                {events.length > 3 && (
-                  <span className="text-[10px] text-zinc-500">+{events.length - 3} more</span>
+                {hiddenCount > 0 && (
+                  <span className="text-[10px] font-medium text-[var(--traycer-teal-light)]">
+                    +{hiddenCount} more
+                  </span>
                 )}
               </div>
             </button>
@@ -144,12 +118,11 @@ export function MarketingCalendar() {
         })}
       </div>
 
-      {selected && (
-        <div className="mt-6">
-          <h3 className="mb-2 text-sm font-medium text-zinc-400">Selected event</h3>
-          <EventDetail event={selected} />
-        </div>
-      )}
+      <CalendarDayModal
+        date={selectedDay}
+        events={selectedDayEvents}
+        onClose={() => setSelectedDay(null)}
+      />
 
       <div className="mt-8">
         <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">
@@ -163,7 +136,7 @@ export function MarketingCalendar() {
               <button
                 key={e.id}
                 type="button"
-                onClick={() => setSelected(e)}
+                onClick={() => setSelectedDay(e.date.slice(0, 10))}
                 className="flex w-full items-center gap-3 panel px-4 py-3 text-left transition-colors hover:border-[var(--traycer-teal-muted)]/40"
               >
                 <span

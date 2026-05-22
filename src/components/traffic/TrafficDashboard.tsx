@@ -1,19 +1,24 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import {
   CartesianGrid,
   ComposedChart,
   Line,
+  ReferenceDot,
   ResponsiveContainer,
-  Scatter,
   Tooltip,
   XAxis,
   YAxis,
-  ZAxis,
 } from "recharts";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useMarketing } from "@/components/providers/MarketingProvider";
+import {
+  buildChartPins,
+  buildChartTimeline,
+  buildTrafficSeries,
+} from "@/lib/chartData";
 import { parseTrafficCsv, pickDefaultMetric } from "@/lib/csv";
 import { addTrafficUpload, deleteTrafficUpload } from "@/lib/firestore";
 import { EVENT_TYPE_COLORS, EVENT_TYPE_LABELS } from "@/lib/types";
@@ -23,6 +28,7 @@ export function TrafficDashboard() {
   const { trafficUploads, chartAnnotations } = useMarketing();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [metric, setMetric] = useState<string>("sessions");
   const [selectedUploadId, setSelectedUploadId] = useState<string | null>(null);
 
@@ -33,32 +39,30 @@ export function TrafficDashboard() {
     return trafficUploads[0];
   }, [trafficUploads, selectedUploadId]);
 
+  useEffect(() => {
+    if (activeUpload?.primaryMetric) {
+      setMetric(activeUpload.primaryMetric);
+    }
+  }, [activeUpload?.id, activeUpload?.primaryMetric]);
+
+  const trafficByDate = useMemo(() => {
+    if (!activeUpload) return new Map<string, number>();
+    return buildTrafficSeries(activeUpload.rows, metric);
+  }, [activeUpload, metric]);
+
   const chartData = useMemo(() => {
     if (!activeUpload) return [];
-    const m = metric || activeUpload.primaryMetric;
-    return activeUpload.rows.map((row) => {
-      const value = (row[m] as number) ?? row.sessions ?? row.users ?? row.pageviews ?? 0;
-      return {
-        date: row.date.slice(0, 10),
-        value: Number(value) || 0,
-        label: row.date,
-      };
-    });
-  }, [activeUpload, metric]);
+    return buildChartTimeline(trafficByDate, chartAnnotations);
+  }, [activeUpload, trafficByDate, chartAnnotations]);
 
   const pins = useMemo(() => {
     if (!chartData.length) return [];
-    const dates = new Set(chartData.map((d) => d.date));
-    return chartAnnotations
-      .filter((a) => dates.has(a.date.slice(0, 10)))
-      .map((a) => {
-        const point = chartData.find((d) => d.date === a.date.slice(0, 10));
-        return { ...a, y: point?.value ?? 0 };
-      });
-  }, [chartAnnotations, chartData]);
+    const dates = chartData.map((d) => d.date);
+    return buildChartPins(chartAnnotations, trafficByDate, dates);
+  }, [chartAnnotations, trafficByDate, chartData]);
 
   const availableMetrics = useMemo(() => {
-    if (!activeUpload?.rows.length) return ["sessions"];
+    if (!activeUpload?.rows.length) return [];
     const keys = new Set<string>();
     for (const row of activeUpload.rows) {
       Object.keys(row).forEach((k) => {
@@ -68,8 +72,14 @@ export function TrafficDashboard() {
     return [...keys];
   }, [activeUpload]);
 
+  const hasTrafficValues = useMemo(
+    () => chartData.some((d) => d.value != null && d.value > 0),
+    [chartData]
+  );
+
   const handleFile = async (file: File) => {
     setError(null);
+    setSuccess(null);
     setUploading(true);
     try {
       const text = await file.text();
@@ -82,6 +92,9 @@ export function TrafficDashboard() {
         primaryMetric,
       });
       setMetric(primaryMetric);
+      setSuccess(
+        `Uploaded ${rows.length} days · metrics: ${metrics.join(", ")} · charting "${primaryMetric}"`
+      );
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to parse CSV");
     } finally {
@@ -92,10 +105,12 @@ export function TrafficDashboard() {
   return (
     <div>
       <div className="mb-6 flex flex-wrap items-end gap-4 rounded-xl border border-zinc-800 bg-zinc-900/40 p-4">
-        <div className="flex-1 min-w-[200px]">
+        <div className="min-w-[200px] flex-1">
           <label className="block text-sm font-medium text-zinc-300">Upload traffic CSV</label>
           <p className="mb-2 text-xs text-zinc-500">
-            Include a date column plus metrics like sessions, users, or pageviews.
+            Needs a <strong>date</strong> column plus numeric columns (Sessions, Users, Pageviews,
+            Active users, etc.). Supports Google Analytics exports and{" "}
+            <code className="text-zinc-400">YYYY-MM-DD</code> / <code className="text-zinc-400">MM/DD/YYYY</code>.
           </p>
           <input
             type="file"
@@ -123,7 +138,7 @@ export function TrafficDashboard() {
               >
                 {trafficUploads.map((u) => (
                   <option key={u.id} value={u.id}>
-                    {u.filename} ({u.uploadedAt.slice(0, 10)})
+                    {u.filename} ({u.rows.length} rows)
                   </option>
                 ))}
               </select>
@@ -131,13 +146,13 @@ export function TrafficDashboard() {
             <label className="text-sm text-zinc-300">
               Metric
               <select
-                value={metric}
+                value={availableMetrics.includes(metric) ? metric : availableMetrics[0] ?? metric}
                 onChange={(e) => setMetric(e.target.value)}
                 className="mt-1 block rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2"
               >
                 {availableMetrics.map((m) => (
                   <option key={m} value={m}>
-                    {m}
+                    {m.replace(/_/g, " ")}
                   </option>
                 ))}
               </select>
@@ -156,10 +171,34 @@ export function TrafficDashboard() {
       </div>
 
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
+      {success && <p className="mb-4 text-sm text-emerald-400">{success}</p>}
 
-      {!chartData.length ? (
+      {canEdit && (
+        <p className="mb-4 text-sm text-zinc-400">
+          Add marketing events on any date in{" "}
+          <Link href="/content" className="text-amber-400 hover:underline">
+            Content Planner
+          </Link>
+          ,{" "}
+          <Link href="/collabs" className="text-amber-400 hover:underline">
+            Collabs
+          </Link>
+          , or{" "}
+          <Link href="/calendar" className="text-amber-400 hover:underline">
+            Calendar
+          </Link>
+          . Past and future dates all appear as pins on this chart.
+        </p>
+      )}
+
+      {!activeUpload ? (
         <div className="flex h-[480px] items-center justify-center rounded-xl border border-dashed border-zinc-700 text-zinc-500">
           Upload a CSV to see your traffic chart with marketing event pins.
+        </div>
+      ) : !hasTrafficValues ? (
+        <div className="flex h-[480px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-zinc-700 text-zinc-500">
+          <p>Dataset loaded ({activeUpload.rows.length} rows) but no values for this metric.</p>
+          <p className="text-sm">Try another metric in the dropdown above.</p>
         </div>
       ) : (
         <>
@@ -173,7 +212,10 @@ export function TrafficDashboard() {
                 {label}
               </span>
             ))}
-            <span className="text-zinc-500">· {pins.length} events on chart</span>
+            <span className="text-zinc-500">
+              · {pins.length} event{pins.length !== 1 ? "s" : ""} on chart ·{" "}
+              {chartData.filter((d) => d.value != null).length} days with traffic data
+            </span>
           </div>
           <div className="h-[520px] w-full rounded-xl border border-zinc-800 bg-zinc-950 p-2">
             <ResponsiveContainer width="100%" height="100%">
@@ -181,10 +223,11 @@ export function TrafficDashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                 <XAxis
                   dataKey="date"
-                  tick={{ fill: "#a1a1aa", fontSize: 11 }}
+                  tick={{ fill: "#a1a1aa", fontSize: 10 }}
                   angle={-35}
                   textAnchor="end"
                   height={70}
+                  interval="preserveStartEnd"
                 />
                 <YAxis tick={{ fill: "#a1a1aa", fontSize: 11 }} />
                 <Tooltip
@@ -200,61 +243,28 @@ export function TrafficDashboard() {
                   dataKey="value"
                   stroke="#f59e0b"
                   strokeWidth={2}
-                  dot={false}
+                  dot={{ r: 2, fill: "#f59e0b" }}
+                  connectNulls={false}
                   name={metric}
                 />
-                <Scatter
-                  data={pins}
-                  dataKey="y"
-                  name="Marketing events"
-                  shape={(props) => {
-                    const { cx, cy, payload } = props as {
-                      cx?: number;
-                      cy?: number;
-                      payload?: (typeof pins)[0];
-                    };
-                    if (cx == null || cy == null || !payload) return null;
-                    return (
-                      <circle
-                        cx={cx}
-                        cy={cy}
-                        r={8}
-                        fill={EVENT_TYPE_COLORS[payload.eventType]}
-                        stroke="#18181b"
-                        strokeWidth={2}
-                      />
-                    );
-                  }}
-                >
-                  <ZAxis range={[80, 80]} />
-                  <Tooltip
-                    cursor={false}
-                    content={({ active, payload }) => {
-                      if (!active || !payload?.[0]) return null;
-                      const pin = payload[0].payload as (typeof pins)[0];
-                      return (
-                        <div className="max-w-xs rounded-lg border border-zinc-600 bg-zinc-900 p-3 text-sm shadow-xl">
-                          <p className="font-semibold text-zinc-50">{pin.title}</p>
-                          <p className="text-zinc-400">{EVENT_TYPE_LABELS[pin.eventType]}</p>
-                          <p className="text-zinc-400">{pin.date}</p>
-                          {pin.cost != null && (
-                            <p className="text-zinc-300">Cost: ${pin.cost.toLocaleString()}</p>
-                          )}
-                          {pin.collabType && (
-                            <p className="text-zinc-300">Type: {pin.collabType}</p>
-                          )}
-                        </div>
-                      );
-                    }}
+                {pins.map((pin) => (
+                  <ReferenceDot
+                    key={pin.id}
+                    x={pin.date}
+                    y={pin.y}
+                    r={pin.onTrafficDay ? 8 : 6}
+                    fill={EVENT_TYPE_COLORS[pin.eventType]}
+                    stroke="#18181b"
+                    strokeWidth={2}
                   />
-                </Scatter>
+                ))}
               </ComposedChart>
             </ResponsiveContainer>
           </div>
 
           <div className="mt-6">
             <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">
-              Events on this chart (hover pins above)
+              Marketing events on chart (hover pins)
             </h3>
             <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
               {pins.map((pin) => (
@@ -271,6 +281,7 @@ export function TrafficDashboard() {
                   </div>
                   <p className="mt-1 text-xs text-zinc-500">
                     {EVENT_TYPE_LABELS[pin.eventType]} · {pin.date}
+                    {!pin.onTrafficDay && " · event only (no CSV row)"}
                   </p>
                   {pin.cost != null && (
                     <p className="text-xs text-zinc-400">${pin.cost.toLocaleString()}</p>
@@ -279,7 +290,8 @@ export function TrafficDashboard() {
               ))}
               {!pins.length && (
                 <p className="text-sm text-zinc-500">
-                  No marketing events match dates in this CSV range. Add content with matching dates in Content Planner or Collabs.
+                  No events yet. Admins: add items in Content Planner or Collabs with a scheduled
+                  date — they will show here automatically.
                 </p>
               )}
             </div>

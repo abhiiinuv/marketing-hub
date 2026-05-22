@@ -22,6 +22,7 @@ import type {
   TrafficUpload,
   VideoRelease,
 } from "@/lib/types";
+import { normalizeChartDate } from "@/lib/dates";
 import { EVENT_TYPE_LABELS } from "@/lib/types";
 
 export function useMarketingData() {
@@ -58,7 +59,7 @@ export function useMarketingData() {
       id: e.id,
       eventType: e.eventType,
       title: e.title,
-      date: e.date.slice(0, 10),
+      date: normalizeChartDate(e.date) ?? e.date.slice(0, 10),
       cost: e.cost,
       collabType: e.collabType,
       videoLink: e.videoLink,

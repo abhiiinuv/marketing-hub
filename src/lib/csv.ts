@@ -19,12 +19,25 @@ function parseNumber(value: string): number | undefined {
   return Number.isFinite(n) ? n : undefined;
 }
 
+function applyMetricAliases(entry: TrafficRow, normalized: string, num: number) {
+  entry[normalized] = num;
+  if (normalized.includes("session")) entry.sessions = num;
+  if (normalized.includes("user")) entry.users = num;
+  if (
+    normalized.includes("pageview") ||
+    normalized === "views" ||
+    normalized.includes("view")
+  )
+    entry.pageviews = num;
+  if (normalized.includes("visit")) entry.sessions = entry.sessions ?? num;
+}
+
 function findDateKey(headers: string[]): string | null {
   for (const h of headers) {
     const n = normalizeKey(h);
     if (DATE_KEYS.some((d) => n.includes(d))) return h;
   }
-  return headers[0] ?? null;
+  return null;
 }
 
 function columnLooksNumeric(
@@ -57,6 +70,115 @@ function findMetricKeys(
   });
 }
 
+/** Dates as column headers (e.g. Mixpanel/Amplitude: series, name, 21-Feb-2026, 22-Feb-2026, …) */
+function isWideDateHeaderFormat(headers: string[]): boolean {
+  const dateCols = headers.filter((h) => normalizeChartDate(h) !== null);
+  const labelCols = headers.length - dateCols.length;
+  return dateCols.length >= 3 && dateCols.length > labelCols;
+}
+
+function parseWideFormat(
+  data: Record<string, string>[],
+  headers: string[]
+): { rows: TrafficRow[]; metrics: string[]; dateKey: string } {
+  const dateHeaders = headers.filter((h) => normalizeChartDate(h) !== null);
+  const labelKeys = headers.filter((h) => normalizeChartDate(h) === null);
+
+  const rows: TrafficRow[] = [];
+
+  for (const dateHeader of dateHeaders) {
+    const isoDate = normalizeChartDate(dateHeader)!;
+    const entry: TrafficRow = { date: isoDate };
+
+    for (const row of data) {
+      const labels = labelKeys
+        .map((k) => row[k]?.trim())
+        .filter((v) => v && v.length > 0);
+      const metricKey = normalizeKey(
+        labels.join("_").replace(/^\$/, "") || "value"
+      );
+      const num = parseNumber(row[dateHeader] ?? "");
+      if (num !== undefined) {
+        applyMetricAliases(entry, metricKey, num);
+      }
+    }
+
+    if (Object.keys(entry).length > 1) rows.push(entry);
+  }
+
+  if (!rows.length) {
+    throw new Error("Wide-format CSV had no numeric values under date columns.");
+  }
+
+  rows.sort((a, b) => a.date.localeCompare(b.date));
+
+  const metrics = [
+    ...new Set(
+      rows.flatMap((r) =>
+        Object.keys(r).filter((k) => k !== "date" && typeof r[k] === "number")
+      )
+    ),
+  ];
+
+  return { rows, metrics, dateKey: "date (columns)" };
+}
+
+function parseLongFormat(
+  data: Record<string, string>[],
+  headers: string[]
+): { rows: TrafficRow[]; metrics: string[]; dateKey: string } {
+  const dateKey = findDateKey(headers);
+  if (!dateKey) throw new Error("Could not find a date column in the CSV.");
+
+  const metricHeaders = findMetricKeys(headers, dateKey, data);
+  if (!metricHeaders.length) {
+    throw new Error(
+      "No numeric metric columns found. Add columns like Sessions, Users, or Pageviews."
+    );
+  }
+
+  const rows: TrafficRow[] = [];
+
+  for (const row of data) {
+    const rawDate = row[dateKey]?.trim();
+    if (!rawDate) continue;
+
+    const isoDate = normalizeChartDate(rawDate);
+    if (!isoDate) continue;
+
+    const entry: TrafficRow = { date: isoDate };
+    for (const key of metricHeaders) {
+      const val = row[key];
+      if (val === undefined || val === "") continue;
+      const num = parseNumber(val);
+      const normalized = normalizeKey(key);
+      if (num !== undefined) {
+        applyMetricAliases(entry, normalized, num);
+      }
+    }
+
+    if (Object.keys(entry).length > 1) rows.push(entry);
+  }
+
+  if (!rows.length) {
+    throw new Error(
+      "No valid rows after parsing. Check date format (YYYY-MM-DD, 21-Feb-2026, or GA 20250115)."
+    );
+  }
+
+  rows.sort((a, b) => a.date.localeCompare(b.date));
+
+  const metrics = [
+    ...new Set(
+      rows.flatMap((r) =>
+        Object.keys(r).filter((k) => k !== "date" && typeof r[k] === "number")
+      )
+    ),
+  ];
+
+  return { rows, metrics, dateKey };
+}
+
 export function parseTrafficCsv(text: string): {
   rows: TrafficRow[];
   metrics: string[];
@@ -82,75 +204,27 @@ export function parseTrafficCsv(text: string): {
     throw new Error("CSV has no column headers.");
   }
 
-  const dateKey = findDateKey(headers);
-  if (!dateKey) throw new Error("Could not find a date column in the CSV.");
-
-  const metricHeaders = findMetricKeys(headers, dateKey, parsed.data);
-  if (!metricHeaders.length) {
-    throw new Error(
-      "No numeric metric columns found. Add columns like Sessions, Users, or Pageviews."
-    );
+  if (isWideDateHeaderFormat(headers)) {
+    return parseWideFormat(parsed.data, headers);
   }
 
-  const rows: TrafficRow[] = [];
-
-  for (const row of parsed.data) {
-    const rawDate = row[dateKey]?.trim();
-    if (!rawDate) continue;
-
-    const isoDate = normalizeChartDate(rawDate);
-    if (!isoDate) continue;
-
-    const entry: TrafficRow = { date: isoDate };
-    for (const key of metricHeaders) {
-      const val = row[key];
-      if (val === undefined || val === "") continue;
-      const num = parseNumber(val);
-      const normalized = normalizeKey(key);
-      if (num !== undefined) {
-        entry[normalized] = num;
-        if (normalized.includes("session")) entry.sessions = num;
-        if (normalized.includes("user")) entry.users = num;
-        if (normalized.includes("pageview") || normalized === "views" || normalized.includes("view"))
-          entry.pageviews = num;
-        if (normalized.includes("visit")) entry.sessions = entry.sessions ?? num;
-      }
-    }
-
-    if (Object.keys(entry).length > 1) rows.push(entry);
-  }
-
-  if (!rows.length) {
-    throw new Error(
-      "No valid rows after parsing. Check date format (YYYY-MM-DD, MM/DD/YYYY, or GA format 20250115)."
-    );
-  }
-
-  rows.sort((a, b) => a.date.localeCompare(b.date));
-
-  const metrics = [
-    ...new Set(
-      rows.flatMap((r) =>
-        Object.keys(r).filter((k) => k !== "date" && typeof r[k] === "number")
-      )
-    ),
-  ];
-
-  return { rows, metrics, dateKey };
+  return parseLongFormat(parsed.data, headers);
 }
 
 export function pickDefaultMetric(metrics: string[]): string {
   const priority = [
+    "unique_sessions",
     "sessions",
     "users",
     "pageviews",
+    "pageview",
     "active_users",
     "views",
     "visits",
     "traffic",
   ];
   for (const p of priority) {
-    const found = metrics.find((m) => m.includes(p));
+    const found = metrics.find((m) => m.includes(p) || m === p);
     if (found) return found;
   }
   return metrics[0] ?? "sessions";

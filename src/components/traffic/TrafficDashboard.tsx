@@ -108,9 +108,9 @@ export function TrafficDashboard() {
         <div className="min-w-[200px] flex-1">
           <label className="block text-sm font-medium text-zinc-300">Upload traffic CSV</label>
           <p className="mb-2 text-xs text-zinc-500">
-            Needs a <strong>date</strong> column plus numeric columns (Sessions, Users, Pageviews,
-            Active users, etc.). Supports Google Analytics exports and{" "}
-            <code className="text-zinc-400">YYYY-MM-DD</code> / <code className="text-zinc-400">MM/DD/YYYY</code>.
+            Supports <strong>date column + metrics</strong> (Google Analytics) or{" "}
+            <strong>dates as columns</strong> (e.g. Unique Sessions export with{" "}
+            <code className="text-zinc-400">21-Feb-2026</code> headers).
           </p>
           <input
             type="file"

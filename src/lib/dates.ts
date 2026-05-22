@@ -1,3 +1,8 @@
+const MONTH_ABBREV: Record<string, number> = {
+  jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6,
+  jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12,
+};
+
 /** Normalize assorted CSV / form dates to YYYY-MM-DD for charts and matching. */
 export function normalizeChartDate(raw: string): string | null {
   const s = raw.trim().replace(/^"|"$/g, "");
@@ -15,6 +20,16 @@ export function normalizeChartDate(raw: string): string | null {
   // Already ISO date or datetime
   if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
     return s.slice(0, 10);
+  }
+
+  // 21-Feb-2026, 1-Mar-2026 (analytics wide exports)
+  const dMonY = s.match(/^(\d{1,2})-([A-Za-z]{3,})-(\d{4})$/);
+  if (dMonY) {
+    const month = MONTH_ABBREV[dMonY[2].toLowerCase().slice(0, 3)];
+    if (month) {
+      const iso = `${dMonY[3]}-${String(month).padStart(2, "0")}-${String(parseInt(dMonY[1], 10)).padStart(2, "0")}`;
+      return isValidIso(iso) ? iso : null;
+    }
   }
 
   // DD/MM/YYYY or MM/DD/YYYY (prefer day-first if ambiguous when first part > 12)

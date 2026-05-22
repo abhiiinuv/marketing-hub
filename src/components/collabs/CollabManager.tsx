@@ -8,7 +8,6 @@ import { Badge } from "@/components/shared/Badge";
 import { RequireAdmin } from "@/components/shared/RequireAdmin";
 import {
   addCollaboration,
-  archiveCollaboration,
   deleteCollaboration,
   updateCollaboration,
 } from "@/lib/firestore";
@@ -31,10 +30,6 @@ export function CollabManager() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Collaboration | null>(null);
   const [form, setForm] = useState(emptyForm);
-  const [archiveId, setArchiveId] = useState<string | null>(null);
-  const [publishedDate, setPublishedDate] = useState(new Date().toISOString().slice(0, 10));
-  const [performanceNotes, setPerformanceNotes] = useState("");
-
   const openCreate = () => {
     setEditing(null);
     setForm(emptyForm);
@@ -74,12 +69,6 @@ export function CollabManager() {
       await addCollaboration(payload);
     }
     setOpen(false);
-  };
-
-  const confirmArchive = async (c: Collaboration) => {
-    await archiveCollaboration(c, publishedDate, performanceNotes.trim() || undefined);
-    setArchiveId(null);
-    setPerformanceNotes("");
   };
 
   return (
@@ -141,9 +130,6 @@ export function CollabManager() {
                       <button type="button" onClick={() => openEdit(c)} className="text-zinc-400 hover:text-zinc-100">
                         Edit
                       </button>
-                      <button type="button" onClick={() => setArchiveId(c.id)} className="text-emerald-400 hover:text-emerald-300">
-                        Archive
-                      </button>
                       <button
                         type="button"
                         onClick={() => deleteCollaboration(c.id)}
@@ -171,40 +157,6 @@ export function CollabManager() {
 
       <Modal open={open} onClose={() => setOpen(false)} title={editing ? "Edit collaboration" : "New collaboration"}>
         <CollabForm form={form} setForm={setForm} onSave={save} />
-      </Modal>
-
-      <Modal open={!!archiveId} onClose={() => setArchiveId(null)} title="Move to backlog">
-        <p className="mb-4 text-sm text-zinc-400">
-          This will move the collaboration to the archive and remove it from active tracking.
-        </p>
-        <label className="mb-3 block text-sm text-zinc-300">
-          Published date
-          <input
-            type="date"
-            value={publishedDate}
-            onChange={(e) => setPublishedDate(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2"
-          />
-        </label>
-        <label className="mb-4 block text-sm text-zinc-300">
-          Performance notes
-          <textarea
-            value={performanceNotes}
-            onChange={(e) => setPerformanceNotes(e.target.value)}
-            rows={3}
-            className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2"
-          />
-        </label>
-        <button
-          type="button"
-          onClick={() => {
-            const c = collabs.find((x) => x.id === archiveId);
-            if (c) confirmArchive(c);
-          }}
-          className="w-full rounded-lg bg-emerald-600 py-2 font-semibold text-white hover:bg-emerald-500"
-        >
-          Confirm archive
-        </button>
       </Modal>
     </div>
   );

@@ -11,7 +11,6 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 import type {
-  BacklogItem,
   Campaign,
   Collaboration,
   InHouseVideo,
@@ -25,7 +24,6 @@ export const COLLECTIONS = {
   videoReleases: "videoReleases",
   inHouseVideos: "inHouseVideos",
   collaborations: "collaborations",
-  collabBacklog: "collabBacklog",
   campaigns: "campaigns",
   trafficUploads: "trafficUploads",
 } as const;
@@ -53,9 +51,6 @@ export const subscribeInHouseVideos = (cb: (items: InHouseVideo[]) => void) =>
 
 export const subscribeCollaborations = (cb: (items: Collaboration[]) => void) =>
   subscribe<Collaboration>(COLLECTIONS.collaborations, "scheduledDate", cb);
-
-export const subscribeBacklog = (cb: (items: BacklogItem[]) => void) =>
-  subscribe<BacklogItem>(COLLECTIONS.collabBacklog, "publishedDate", cb);
 
 export const subscribeCampaigns = (cb: (items: Campaign[]) => void) =>
   subscribe<Campaign>(COLLECTIONS.campaigns, "scheduledDate", cb);
@@ -113,31 +108,6 @@ export async function updateCollaboration(id: string, data: Partial<Collaboratio
 
 export async function deleteCollaboration(id: string) {
   return deleteDoc(doc(db, COLLECTIONS.collaborations, id));
-}
-
-export async function addBacklogItem(data: Omit<BacklogItem, "id">) {
-  return addDoc(collection(db, COLLECTIONS.collabBacklog), data);
-}
-
-export async function updateBacklogItem(id: string, data: Partial<BacklogItem>) {
-  return updateDoc(doc(db, COLLECTIONS.collabBacklog, id), data);
-}
-
-export async function deleteBacklogItem(id: string) {
-  return deleteDoc(doc(db, COLLECTIONS.collabBacklog, id));
-}
-
-export async function archiveCollaboration(collab: Collaboration, publishedDate: string, performanceNotes?: string) {
-  await addBacklogItem({
-    creatorName: collab.creatorName,
-    channelLink: collab.channelLink,
-    finalVideoLink: collab.videoLink ?? collab.channelLink,
-    cost: collab.cost,
-    type: collab.type,
-    publishedDate,
-    performanceNotes,
-  });
-  await deleteCollaboration(collab.id);
 }
 
 export async function addCampaign(data: Omit<Campaign, "id">) {

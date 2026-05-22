@@ -21,17 +21,6 @@ export interface Collaboration {
   createdAt: string;
 }
 
-export interface BacklogItem {
-  id: string;
-  creatorName: string;
-  channelLink: string;
-  finalVideoLink: string;
-  cost: number;
-  type: CollabType;
-  publishedDate: string;
-  performanceNotes?: string;
-}
-
 export interface SocialPost {
   id: string;
   title: string;

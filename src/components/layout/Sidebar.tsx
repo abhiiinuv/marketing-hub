@@ -4,10 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   FaCalendarDays,
-  FaChartLine,
+  FaCloudArrowUp,
   FaHandshake,
   FaHouse,
-  FaBoxArchive,
   FaPenToSquare,
 } from "react-icons/fa6";
 
@@ -15,9 +14,8 @@ const links = [
   { href: "/", label: "Dashboard", icon: FaHouse },
   { href: "/calendar", label: "Calendar", icon: FaCalendarDays },
   { href: "/collabs", label: "YouTuber Collabs", icon: FaHandshake },
-  { href: "/backlog", label: "Collab Backlog", icon: FaBoxArchive },
   { href: "/content", label: "Content Planner", icon: FaPenToSquare },
-  { href: "/traffic", label: "Traffic & Pins", icon: FaChartLine },
+  { href: "/traffic", label: "Data Upload", icon: FaCloudArrowUp },
 ];
 
 export function Sidebar() {

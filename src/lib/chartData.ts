@@ -6,6 +6,10 @@ export type ChartPoint = {
   value: number | null;
 };
 
+export type ChartPointWithEvents = ChartPoint & {
+  events: ChartAnnotation[];
+};
+
 export function buildTrafficSeries(
   rows: TrafficRow[],
   metric: string
@@ -25,7 +29,7 @@ export function buildTrafficSeries(
   return map;
 }
 
-/** Merge CSV dates + all event dates so past/future events appear on the chart. */
+/** Merge CSV dates + all event dates so past/future events appear on the chart axis. */
 export function buildChartTimeline(
   trafficByDate: Map<string, number>,
   annotations: ChartAnnotation[]
@@ -42,26 +46,4 @@ export function buildChartTimeline(
       date,
       value: trafficByDate.has(date) ? trafficByDate.get(date)! : null,
     }));
-}
-
-export function buildChartPins(
-  annotations: ChartAnnotation[],
-  trafficByDate: Map<string, number>,
-  chartDates: string[]
-): (ChartAnnotation & { date: string; y: number; onTrafficDay: boolean })[] {
-  const minTraffic = Math.min(
-    ...[...trafficByDate.values()].filter((v) => v > 0),
-    0
-  );
-  const fallbackY = minTraffic > 0 ? minTraffic * 0.05 : 1;
-
-  return annotations
-    .map((a) => {
-      const date = normalizeChartDate(a.date) ?? a.date.slice(0, 10);
-      const traffic = trafficByDate.get(date);
-      const onTrafficDay = traffic !== undefined;
-      const y = onTrafficDay ? traffic! : fallbackY;
-      return { ...a, date, y, onTrafficDay };
-    })
-    .filter((p) => chartDates.includes(p.date));
 }

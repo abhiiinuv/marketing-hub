@@ -1,103 +1,113 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Link from "next/link";
+import { format, parseISO } from "date-fns";
+import { useMarketing } from "@/components/providers/MarketingProvider";
+import { EVENT_TYPE_COLORS, EVENT_TYPE_LABELS } from "@/lib/types";
+
+export default function DashboardPage() {
+  const { stats, upcoming } = useMarketing();
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div>
+      <header className="mb-8">
+        <h1 className="text-2xl font-bold text-zinc-50">Marketing Dashboard</h1>
+        <p className="mt-1 text-zinc-400">
+          Central view of upcoming marketing activities across collabs, content, and campaigns.
+        </p>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {[
+          { label: "Upcoming events", value: stats.upcomingCount, href: "/calendar" },
+          { label: "Active collabs", value: stats.activeCollabs, href: "/collabs" },
+          { label: "Live collabs", value: stats.liveCollabs, href: "/collabs" },
+          { label: "Backlog entries", value: stats.backlogCount, href: "/backlog" },
+        ].map((card) => (
+          <Link
+            key={card.label}
+            href={card.href}
+            className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 transition-colors hover:border-zinc-600"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <p className="text-sm text-zinc-500">{card.label}</p>
+            <p className="mt-1 text-3xl font-bold text-amber-400">{card.value}</p>
+          </Link>
+        ))}
+      </div>
+
+      <section>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-zinc-100">Next up</h2>
+          <Link href="/calendar" className="text-sm text-amber-400 hover:underline">
+            View full calendar →
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="space-y-2">
+          {upcoming.map((e) => (
+            <div
+              key={e.id}
+              className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900/40 px-4 py-3"
+            >
+              <span
+                className="h-3 w-3 shrink-0 rounded-full"
+                style={{ background: EVENT_TYPE_COLORS[e.eventType] }}
+              />
+              <div className="min-w-0 flex-1">
+                <p className="font-medium text-zinc-100">{e.title}</p>
+                <p className="text-xs text-zinc-500">
+                  {format(parseISO(e.date), "MMM d, yyyy")} · {EVENT_TYPE_LABELS[e.eventType]}
+                </p>
+              </div>
+              {e.cost != null && (
+                <span className="text-sm text-zinc-400">${e.cost.toLocaleString()}</span>
+              )}
+            </div>
+          ))}
+          {!upcoming.length && (
+            <p className="py-8 text-center text-zinc-500">
+              No upcoming events. Add content in Content Planner or Collabs.
+            </p>
+          )}
+        </div>
+      </section>
+
+      <section className="mt-10 grid gap-4 md:grid-cols-3">
+        <QuickLink
+          title="Upload traffic data"
+          description="CSV upload with marketing pins on the chart"
+          href="/traffic"
+        />
+        <QuickLink
+          title="Track YouTuber collabs"
+          description="Costs, status, links, and dedicated vs integration"
+          href="/collabs"
+        />
+        <QuickLink
+          title="Plan tweets & videos"
+          description="Social posts, releases, and in-house content"
+          href="/content"
+        />
+      </section>
     </div>
+  );
+}
+
+function QuickLink({
+  title,
+  description,
+  href,
+}: {
+  title: string;
+  description: string;
+  href: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="rounded-xl border border-zinc-800 p-5 hover:border-amber-500/40 hover:bg-zinc-900/60"
+    >
+      <h3 className="font-semibold text-zinc-100">{title}</h3>
+      <p className="mt-1 text-sm text-zinc-500">{description}</p>
+    </Link>
   );
 }

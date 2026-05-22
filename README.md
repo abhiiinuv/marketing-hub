@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Marketing Hub
 
-## Getting Started
+Internal marketing planning dashboard for your team. Track collabs, content, campaigns, and website traffic—with marketing events pinned on traffic charts.
 
-First, run the development server:
+## Stack
+
+- **Next.js 15** (App Router, TypeScript, Tailwind)
+- **Firebase Firestore** — real-time shared data
+- **Recharts** — interactive traffic chart with event pins
+- **Vercel** — free hosting
+
+## Features
+
+| Area | What you get |
+|------|----------------|
+| **Dashboard** | Upcoming events and quick stats |
+| **Calendar** | Month view + timeline of all marketing by date |
+| **YouTuber Collabs** | Creator, channel, type, cost, status, links, notes |
+| **Collab Backlog** | Archive with performance notes |
+| **Content Planner** | Tweets, video releases, in-house videos, campaigns |
+| **Traffic** | CSV upload, metric picker, pins from all dated marketing events |
+
+## Quick start (shared with Creatorboard)
+
+Uses Firebase project **creatorboard-c3ae1** — same database, separate collections.
+
+### 1. Environment
+
+`.env.local` should mirror `creatorboard/.env` with `NEXT_PUBLIC_` prefixes (see `.env.local.example`).
+
+### 2. Authentication
+
+- **View**: no login required (calendar, collabs, traffic charts).
+- **Edit**: Firebase **Email/Password** — same admin accounts as Creatorboard `/admin`.
+- Enable: Firebase Console → **Authentication** → **Sign-in method** → **Email/Password** → Enable.
+- Create users: **Authentication** → **Users** → Add user.
+
+### 3. Firestore rules (deploy from Creatorboard folder)
+
+Merged rules live in `creatorboard/firestore.rules` (Creatorboard + Marketing collections).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd creatorboard
+firebase deploy --only firestore:rules
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Do **not** deploy open rules that omit Creatorboard paths.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Run locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000).
 
-To learn more about Next.js, take a look at the following resources:
+### 4. Deploy to Vercel (free)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Push `marketing-hub` to GitHub.
+2. Import the repo at [vercel.com](https://vercel.com).
+3. Set root directory to `marketing-hub` if the repo contains multiple folders.
+4. Add the same `NEXT_PUBLIC_FIREBASE_*` env vars in Vercel → Settings → Environment Variables.
+5. Deploy.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## CSV format
 
-## Deploy on Vercel
+Traffic uploads need a **date** column and one or more numeric metrics. Example:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```csv
+date,sessions,users,pageviews
+2025-01-01,1200,980,3400
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See `sample-traffic.csv` for a test file. Marketing events appear as colored pins when their scheduled date matches a row in the CSV.
+
+## Security
+
+- Marketing data: **public read**, **write only when signed in** (`request.auth != null`).
+- Creatorboard rules unchanged (`creators`, `weeklyStats`, `winners`).
+- To limit marketing writes to specific emails, edit `isMarketingAdmin()` in `creatorboard/firestore.rules` with an email allowlist.
+
+## Project structure
+
+```
+src/
+  app/           # Pages (dashboard, calendar, collabs, backlog, content, traffic)
+  components/    # UI by feature
+  hooks/         # Real-time Firestore subscriptions
+  lib/           # Firebase, types, CSV parser, calendar helpers
+```

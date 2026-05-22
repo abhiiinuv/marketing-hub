@@ -118,6 +118,6 @@ export const EVENT_TYPE_COLORS: Record<MarketingEventType, string> = {
   tweet: "#3b82f6",
   video_release: "#8b5cf6",
   in_house: "#10b981",
-  collab: "#f59e0b",
+  collab: "#f97316",
   campaign: "#ec4899",
 };

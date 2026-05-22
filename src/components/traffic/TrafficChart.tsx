@@ -14,7 +14,7 @@ import {
 import { useTrafficChartData } from "@/hooks/useTrafficChartData";
 import { DayChartTooltip } from "./DayChartTooltip";
 import { DayDetailModal } from "./DayDetailModal";
-import { EVENT_TYPE_COLORS, EVENT_TYPE_LABELS } from "@/lib/types";
+import { ChartDayDot, CHART_TOP_MARGIN } from "./ChartDayDot";
 import type { ChartPointWithEvents } from "@/lib/chartData";
 
 type TrafficChartProps = {
@@ -22,9 +22,6 @@ type TrafficChartProps = {
   showControls?: boolean;
   emptyMessage?: string;
 };
-
-const DOT_RADIUS = 3;
-const ACTIVE_DOT_RADIUS = 5;
 
 export function TrafficChart({
   height = 480,
@@ -50,48 +47,16 @@ export function TrafficChart({
   }, []);
 
   const renderDot = useCallback(
-    (props: { cx?: number; cy?: number; payload?: ChartPointWithEvents }) => {
-      const { cx, cy, payload } = props;
-      if (cx == null || cy == null || !payload) return null;
-      return (
-        <circle
-          cx={cx}
-          cy={cy}
-          r={DOT_RADIUS}
-          fill="#f59e0b"
-          stroke="#f59e0b"
-          strokeWidth={1}
-          style={{ cursor: "pointer" }}
-          onClick={(e) => {
-            e.stopPropagation();
-            openDayDetail(payload);
-          }}
-        />
-      );
-    },
+    (props: { cx?: number; cy?: number; payload?: ChartPointWithEvents }) => (
+      <ChartDayDot {...props} onSelect={openDayDetail} />
+    ),
     [openDayDetail]
   );
 
   const renderActiveDot = useCallback(
-    (props: { cx?: number; cy?: number; payload?: ChartPointWithEvents }) => {
-      const { cx, cy, payload } = props;
-      if (cx == null || cy == null || !payload) return null;
-      return (
-        <circle
-          cx={cx}
-          cy={cy}
-          r={ACTIVE_DOT_RADIUS}
-          fill="#fbbf24"
-          stroke="#ffffff"
-          strokeWidth={2}
-          style={{ cursor: "pointer" }}
-          onClick={(e) => {
-            e.stopPropagation();
-            openDayDetail(payload);
-          }}
-        />
-      );
-    },
+    (props: { cx?: number; cy?: number; payload?: ChartPointWithEvents }) => (
+      <ChartDayDot {...props} active onSelect={openDayDetail} />
+    ),
     [openDayDetail]
   );
 
@@ -151,7 +116,7 @@ export function TrafficChart({
               <select
                 value={availableMetrics.includes(metric) ? metric : availableMetrics[0]}
                 onChange={(e) => setMetric(e.target.value)}
-                className="ml-2 rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-1 text-zinc-200"
+                className="ml-1 rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-1 text-zinc-200"
               >
                 {availableMetrics.map((m) => (
                   <option key={m} value={m}>
@@ -162,29 +127,20 @@ export function TrafficChart({
             </label>
           )}
           <span className="text-xs text-zinc-500">
-            Hover for a quick preview · Click a point for full details and links
+            Amber = sessions · Colored dots above = marketing events · Hover or click for details
           </span>
         </div>
       )}
-
-      <div className="mb-2 flex flex-wrap gap-3 text-xs">
-        {Object.entries(EVENT_TYPE_LABELS).map(([type, label]) => (
-          <span key={type} className="flex items-center gap-1.5 text-zinc-500">
-            <span
-              className="inline-block h-2 w-2 rounded-full"
-              style={{ background: EVENT_TYPE_COLORS[type as keyof typeof EVENT_TYPE_COLORS] }}
-            />
-            {label}
-          </span>
-        ))}
-      </div>
 
       <div
         className="w-full rounded-xl border border-zinc-800 bg-zinc-950 p-2"
         style={{ height }}
       >
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={chartData} margin={{ top: 16, right: 24, left: 8, bottom: 56 }}>
+          <ComposedChart
+            data={chartData}
+            margin={{ top: CHART_TOP_MARGIN, right: 24, left: 8, bottom: 56 }}
+          >
             <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
             <XAxis
               dataKey="date"

@@ -97,11 +97,13 @@ export interface ChartAnnotation {
   eventType: MarketingEventType;
   title: string;
   date: string;
+  status?: string;
   cost?: number;
   collabType?: CollabType;
   videoLink?: string;
   channelLink?: string;
   link?: string;
+  notes?: string;
 }
 
 export const EVENT_TYPE_LABELS: Record<MarketingEventType, string> = {

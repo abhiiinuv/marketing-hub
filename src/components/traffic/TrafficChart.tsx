@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useCallback, useState } from "react";
 import {
   CartesianGrid,
   ComposedChart,
@@ -12,6 +13,7 @@ import {
 } from "recharts";
 import { useTrafficChartData } from "@/hooks/useTrafficChartData";
 import { DayChartTooltip } from "./DayChartTooltip";
+import { DayDetailModal } from "./DayDetailModal";
 import { EVENT_TYPE_COLORS, EVENT_TYPE_LABELS } from "@/lib/types";
 import type { ChartPointWithEvents } from "@/lib/chartData";
 
@@ -20,6 +22,9 @@ type TrafficChartProps = {
   showControls?: boolean;
   emptyMessage?: string;
 };
+
+const DOT_RADIUS = 3;
+const ACTIVE_DOT_RADIUS = 5;
 
 export function TrafficChart({
   height = 480,
@@ -37,6 +42,58 @@ export function TrafficChart({
     setSelectedUploadId,
     availableMetrics,
   } = useTrafficChartData();
+
+  const [selectedPoint, setSelectedPoint] = useState<ChartPointWithEvents | null>(null);
+
+  const openDayDetail = useCallback((point: ChartPointWithEvents) => {
+    setSelectedPoint(point);
+  }, []);
+
+  const renderDot = useCallback(
+    (props: { cx?: number; cy?: number; payload?: ChartPointWithEvents }) => {
+      const { cx, cy, payload } = props;
+      if (cx == null || cy == null || !payload) return null;
+      return (
+        <circle
+          cx={cx}
+          cy={cy}
+          r={DOT_RADIUS}
+          fill="#f59e0b"
+          stroke="#f59e0b"
+          strokeWidth={1}
+          style={{ cursor: "pointer" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            openDayDetail(payload);
+          }}
+        />
+      );
+    },
+    [openDayDetail]
+  );
+
+  const renderActiveDot = useCallback(
+    (props: { cx?: number; cy?: number; payload?: ChartPointWithEvents }) => {
+      const { cx, cy, payload } = props;
+      if (cx == null || cy == null || !payload) return null;
+      return (
+        <circle
+          cx={cx}
+          cy={cy}
+          r={ACTIVE_DOT_RADIUS}
+          fill="#fbbf24"
+          stroke="#ffffff"
+          strokeWidth={2}
+          style={{ cursor: "pointer" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            openDayDetail(payload);
+          }}
+        />
+      );
+    },
+    [openDayDetail]
+  );
 
   if (!activeUpload) {
     return (
@@ -105,7 +162,7 @@ export function TrafficChart({
             </label>
           )}
           <span className="text-xs text-zinc-500">
-            Hover any point to see sessions + marketing events that day
+            Hover for a quick preview · Click a point for full details and links
           </span>
         </div>
       )}
@@ -148,30 +205,18 @@ export function TrafficChart({
               stroke="#f59e0b"
               strokeWidth={2}
               connectNulls={false}
-              dot={(props) => {
-                const { cx, cy, payload } = props as {
-                  cx?: number;
-                  cy?: number;
-                  payload?: ChartPointWithEvents;
-                };
-                if (cx == null || cy == null) return null;
-                const hasEvents = (payload?.events?.length ?? 0) > 0;
-                return (
-                  <circle
-                    cx={cx}
-                    cy={cy}
-                    r={hasEvents ? 5 : 3}
-                    fill="#f59e0b"
-                    stroke={hasEvents ? "#fafafa" : "#f59e0b"}
-                    strokeWidth={hasEvents ? 2 : 0}
-                  />
-                );
-              }}
-              activeDot={{ r: 6, fill: "#fbbf24", stroke: "#fff", strokeWidth: 2 }}
+              dot={renderDot}
+              activeDot={renderActiveDot}
             />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
+
+      <DayDetailModal
+        point={selectedPoint}
+        metricLabel={metricLabel}
+        onClose={() => setSelectedPoint(null)}
+      />
     </div>
   );
 }

@@ -56,11 +56,13 @@ export function useMarketingData() {
       eventType: e.eventType,
       title: e.title,
       date: normalizeChartDate(e.date) ?? e.date.slice(0, 10),
+      status: e.status,
       cost: e.cost,
       collabType: e.collabType,
       videoLink: e.videoLink,
       channelLink: e.channelLink,
       link: e.link,
+      notes: e.notes,
     }));
   }, [calendarEvents]);
 

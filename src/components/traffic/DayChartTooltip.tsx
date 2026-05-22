@@ -41,23 +41,23 @@ export function DayChartTooltip({
         {point.events.length === 0 ? (
           <p className="text-zinc-500">No marketing events on this day.</p>
         ) : (
-          <ul className="space-y-2">
-            {point.events.map((e) => (
-              <li key={e.id} className="flex gap-2">
-                <span
-                  className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
-                  style={{ background: EVENT_TYPE_COLORS[e.eventType] }}
-                />
-                <div>
-                  <p className="font-medium text-zinc-100">{e.title}</p>
-                  <p className="text-xs text-zinc-400">{EVENT_TYPE_LABELS[e.eventType]}</p>
-                  {e.cost != null && (
-                    <p className="text-xs text-zinc-500">${e.cost.toLocaleString()}</p>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul className="space-y-2">
+              {point.events.map((e) => (
+                <li key={e.id} className="flex gap-2">
+                  <span
+                    className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
+                    style={{ background: EVENT_TYPE_COLORS[e.eventType] }}
+                  />
+                  <div>
+                    <p className="font-medium text-zinc-100">{e.title}</p>
+                    <p className="text-xs text-zinc-400">{EVENT_TYPE_LABELS[e.eventType]}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2 text-xs text-zinc-500">Click for full details and links</p>
+          </>
         )}
       </div>
     </div>

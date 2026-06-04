@@ -20,6 +20,15 @@ import { groupEventsByDate } from "@/lib/calendar";
 import { EVENT_TYPE_COLORS, EVENT_TYPE_LABELS } from "@/lib/types";
 
 const VISIBLE_EVENTS_PER_DAY = 2;
+const DAY_HEADERS = [
+  { full: "Sun", short: "S" },
+  { full: "Mon", short: "M" },
+  { full: "Tue", short: "T" },
+  { full: "Wed", short: "W" },
+  { full: "Thu", short: "T" },
+  { full: "Fri", short: "F" },
+  { full: "Sat", short: "S" },
+];
 
 export function MarketingCalendar() {
   const { calendarEvents } = useMarketing();
@@ -37,29 +46,29 @@ export function MarketingCalendar() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="font-serif text-2xl font-normal text-white">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="font-serif text-xl font-normal text-white sm:text-2xl">
           {format(month, "MMMM yyyy")}
         </h2>
-        <div className="flex gap-2">
+        <div className="grid grid-cols-3 gap-2 sm:flex sm:gap-2">
           <button
             type="button"
             onClick={() => setMonth((m) => subMonths(m, 1))}
-            className="btn-secondary !py-1.5 !text-sm"
+            className="btn-secondary !py-1.5 !text-xs sm:!text-sm"
           >
             Previous
           </button>
           <button
             type="button"
             onClick={() => setMonth(startOfMonth(new Date()))}
-            className="btn-secondary !py-1.5 !text-sm"
+            className="btn-secondary !py-1.5 !text-xs sm:!text-sm"
           >
             Today
           </button>
           <button
             type="button"
             onClick={() => setMonth((m) => addMonths(m, 1))}
-            className="btn-secondary !py-1.5 !text-sm"
+            className="btn-secondary !py-1.5 !text-xs sm:!text-sm"
           >
             Next
           </button>
@@ -67,9 +76,10 @@ export function MarketingCalendar() {
       </div>
 
       <div className="panel grid grid-cols-7 gap-px overflow-hidden p-px">
-        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-          <div key={d} className="bg-[var(--surface)] px-2 py-2 text-center text-xs font-medium text-[var(--text-subtle)]">
-            {d}
+        {DAY_HEADERS.map((d) => (
+          <div key={d.full} className="bg-[var(--surface)] px-1 py-2 text-center text-[10px] font-medium text-[var(--text-subtle)] sm:px-2 sm:text-xs">
+            <span className="sm:hidden">{d.short}</span>
+            <span className="hidden sm:inline">{d.full}</span>
           </div>
         ))}
         {days.map((day) => {
@@ -78,13 +88,14 @@ export function MarketingCalendar() {
           const inMonth = isSameMonth(day, month);
           const isToday = isSameDay(day, new Date());
           const hiddenCount = Math.max(0, events.length - VISIBLE_EVENTS_PER_DAY);
+          const mobileHiddenCount = Math.max(0, events.length - 4);
 
           return (
             <button
               key={key}
               type="button"
               onClick={() => setSelectedDay(key)}
-              className={`min-h-[88px] bg-black p-1.5 text-left transition-colors hover:bg-[var(--surface-hover)] ${
+              className={`min-h-[72px] bg-black p-1 text-left transition-colors hover:bg-[var(--surface-hover)] sm:min-h-[88px] sm:p-1.5 ${
                 !inMonth ? "opacity-40" : ""
               } ${isToday ? "ring-1 ring-inset ring-[var(--traycer-teal-muted)]" : ""}`}
               aria-label={
@@ -97,19 +108,36 @@ export function MarketingCalendar() {
                 {format(day, "d")}
               </span>
               <div className="mt-1 space-y-0.5">
-                {events.slice(0, VISIBLE_EVENTS_PER_DAY).map((e) => (
-                  <div
-                    key={e.id}
-                    className="truncate rounded px-1 py-0.5 text-[10px] font-medium text-zinc-900"
-                    style={{ background: EVENT_TYPE_COLORS[e.eventType] }}
-                    title={e.title}
-                  >
-                    {e.title}
-                  </div>
-                ))}
+                <div className="hidden sm:block">
+                  {events.slice(0, VISIBLE_EVENTS_PER_DAY).map((e) => (
+                    <div
+                      key={e.id}
+                      className="truncate rounded px-1 py-0.5 text-[10px] font-medium text-zinc-900"
+                      style={{ background: EVENT_TYPE_COLORS[e.eventType] }}
+                      title={e.title}
+                    >
+                      {e.title}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-0.5 sm:hidden">
+                  {events.slice(0, 4).map((e) => (
+                    <span
+                      key={e.id}
+                      className="inline-block h-1.5 w-1.5 rounded-full"
+                      style={{ background: EVENT_TYPE_COLORS[e.eventType] }}
+                      title={e.title}
+                    />
+                  ))}
+                </div>
                 {hiddenCount > 0 && (
-                  <span className="text-[10px] font-medium text-[var(--traycer-teal-light)]">
+                  <span className="hidden text-[10px] font-medium text-[var(--traycer-teal-light)] sm:inline">
                     +{hiddenCount} more
+                  </span>
+                )}
+                {mobileHiddenCount > 0 && (
+                  <span className="text-[9px] font-medium text-[var(--traycer-teal-light)] sm:hidden">
+                    +{mobileHiddenCount}
                   </span>
                 )}
               </div>

@@ -31,7 +31,7 @@ export function AdminBar() {
   return (
     <>
       <div
-        className={`panel-subtle mb-6 flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm ${
+        className={`panel-subtle mb-4 flex flex-col gap-3 px-4 py-3 text-sm sm:mb-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between ${
           canEdit ? "ring-1 ring-[var(--traycer-teal-muted)]/30" : ""
         }`}
       >
@@ -51,11 +51,11 @@ export function AdminBar() {
           )}
         </div>
         {canEdit ? (
-          <button type="button" onClick={() => signOut()} className="btn-secondary">
+          <button type="button" onClick={() => signOut()} className="btn-secondary w-full sm:w-auto">
             Sign out
           </button>
         ) : (
-          <button type="button" onClick={() => setLoginOpen(true)} className="btn-primary">
+          <button type="button" onClick={() => setLoginOpen(true)} className="btn-primary w-full sm:w-auto">
             Admin sign in
           </button>
         )}

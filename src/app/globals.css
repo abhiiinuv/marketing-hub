@@ -129,7 +129,13 @@ textarea {
   background: var(--surface);
   padding: 0.5rem 0.75rem;
   color: var(--foreground);
-  font-size: 0.875rem;
+  font-size: 1rem;
+}
+
+@media (min-width: 640px) {
+  .input-field {
+    font-size: 0.875rem;
+  }
 }
 
 .input-field:focus {

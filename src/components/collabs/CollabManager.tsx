@@ -94,76 +94,119 @@ export function CollabManager() {
         </div>
       </RequireAdmin>
 
-      <div className="panel overflow-x-auto">
-        <table className="w-full min-w-[800px] text-left text-sm">
-          <thead className="border-b border-[var(--border)] bg-[var(--surface)] text-xs uppercase tracking-wider text-[var(--text-subtle)]">
-            <tr>
-              <th className="px-4 py-3">Creator</th>
-              <th className="px-4 py-3">Type</th>
-              <th className="px-4 py-3">Cost</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Date</th>
-              <th className="px-4 py-3">Links</th>
-              <th className="px-4 py-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[var(--border)]">
-            {collabs.map((c) => (
-              <tr key={c.id} className="hover:bg-[var(--surface-hover)]/50">
-                <td className="px-4 py-3">
-                  <p className="font-medium text-white">{c.creatorName}</p>
-                  {c.notes && <p className="mt-0.5 text-xs text-[var(--text-subtle)] line-clamp-1">{c.notes}</p>}
-                </td>
-                <td className="px-4 py-3">
-                  <Badge label={c.type} />
-                </td>
-                <td className="px-4 py-3 text-[var(--text-muted)]">${c.cost.toLocaleString()}</td>
-                <td className="px-4 py-3">
-                  <Badge label={c.status} />
-                </td>
-                <td className="px-4 py-3 text-[var(--text-muted)]">{c.scheduledDate.slice(0, 10)}</td>
-                <td className="px-4 py-3">
-                  {c.videoLink ? (
-                    <a href={normalizeExternalUrl(c.videoLink)!} target="_blank" rel="noreferrer" className="link-teal hover:underline">
-                      Video
-                    </a>
-                  ) : c.channelLink ? (
-                    <a href={normalizeExternalUrl(c.channelLink)!} target="_blank" rel="noreferrer" className="link-teal hover:underline">
-                      Channel
-                    </a>
-                  ) : (
-                    <span className="text-[var(--text-subtle)]">—</span>
-                  )}
-                </td>
-                <td className="px-4 py-3">
-                  {canEdit ? (
-                    <div className="flex gap-2">
-                      <button type="button" onClick={() => openEdit(c)} className="text-[var(--text-muted)] hover:text-white">
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => deleteCollaboration(c.id)}
-                        className="text-red-400 hover:text-red-300"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  ) : (
-                    <span className="text-xs text-zinc-600">—</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-            {!collabs.length && (
+      <div className="hidden md:block">
+        <div className="panel overflow-x-auto">
+          <table className="w-full min-w-[800px] text-left text-sm">
+            <thead className="border-b border-[var(--border)] bg-[var(--surface)] text-xs uppercase tracking-wider text-[var(--text-subtle)]">
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-zinc-500">
-                  No active collaborations yet.
-                </td>
+                <th className="px-4 py-3">Creator</th>
+                <th className="px-4 py-3">Type</th>
+                <th className="px-4 py-3">Cost</th>
+                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Date</th>
+                <th className="px-4 py-3">Links</th>
+                <th className="px-4 py-3">Actions</th>
               </tr>
+            </thead>
+            <tbody className="divide-y divide-[var(--border)]">
+              {collabs.map((c) => (
+                <tr key={c.id} className="hover:bg-[var(--surface-hover)]/50">
+                  <td className="px-4 py-3">
+                    <p className="font-medium text-white">{c.creatorName}</p>
+                    {c.notes && <p className="mt-0.5 text-xs text-[var(--text-subtle)] line-clamp-1">{c.notes}</p>}
+                  </td>
+                  <td className="px-4 py-3">
+                    <Badge label={c.type} />
+                  </td>
+                  <td className="px-4 py-3 text-[var(--text-muted)]">${c.cost.toLocaleString()}</td>
+                  <td className="px-4 py-3">
+                    <Badge label={c.status} />
+                  </td>
+                  <td className="px-4 py-3 text-[var(--text-muted)]">{c.scheduledDate.slice(0, 10)}</td>
+                  <td className="px-4 py-3">
+                    {c.videoLink ? (
+                      <a href={normalizeExternalUrl(c.videoLink)!} target="_blank" rel="noreferrer" className="link-teal hover:underline">
+                        Video
+                      </a>
+                    ) : c.channelLink ? (
+                      <a href={normalizeExternalUrl(c.channelLink)!} target="_blank" rel="noreferrer" className="link-teal hover:underline">
+                        Channel
+                      </a>
+                    ) : (
+                      <span className="text-[var(--text-subtle)]">—</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    {canEdit ? (
+                      <div className="flex gap-2">
+                        <button type="button" onClick={() => openEdit(c)} className="text-[var(--text-muted)] hover:text-white">
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => deleteCollaboration(c.id)}
+                          className="text-red-400 hover:text-red-300"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="text-xs text-zinc-600">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+              {!collabs.length && (
+                <tr>
+                  <td colSpan={7} className="px-4 py-8 text-center text-zinc-500">
+                    No active collaborations yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {!collabs.length && (
+          <p className="panel-subtle px-4 py-8 text-center text-sm text-zinc-500">
+            No active collaborations yet.
+          </p>
+        )}
+        {collabs.map((c) => (
+          <article key={c.id} className="panel p-4">
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+              <p className="font-medium text-white">{c.creatorName}</p>
+              <Badge label={c.type} />
+              <Badge label={c.status} />
+            </div>
+            {c.notes && <p className="mb-2 text-xs text-[var(--text-subtle)]">{c.notes}</p>}
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-[var(--text-muted)]">
+              <span>${c.cost.toLocaleString()}</span>
+              <span>{c.scheduledDate.slice(0, 10)}</span>
+              {c.videoLink ? (
+                <a href={normalizeExternalUrl(c.videoLink)!} target="_blank" rel="noreferrer" className="link-teal hover:underline">
+                  Video
+                </a>
+              ) : c.channelLink ? (
+                <a href={normalizeExternalUrl(c.channelLink)!} target="_blank" rel="noreferrer" className="link-teal hover:underline">
+                  Channel
+                </a>
+              ) : null}
+            </div>
+            {canEdit && (
+              <div className="mt-3 flex gap-3 border-t border-[var(--border)] pt-3">
+                <button type="button" onClick={() => openEdit(c)} className="text-sm text-[var(--text-muted)] hover:text-white">
+                  Edit
+                </button>
+                <button type="button" onClick={() => deleteCollaboration(c.id)} className="text-sm text-red-400">
+                  Delete
+                </button>
+              </div>
             )}
-          </tbody>
-        </table>
+          </article>
+        ))}
       </div>
 
       <Modal open={open} onClose={() => setOpen(false)} title={editing ? "Edit collaboration" : "New collaboration"}>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useState } from "react";
+import { useChartHeight } from "@/hooks/useMediaQuery";
 import {
   CartesianGrid,
   ComposedChart,
@@ -26,11 +27,13 @@ type TrafficChartProps = {
 };
 
 export function TrafficChart({
-  height = 520,
+  height,
   showControls = true,
   showLegend = true,
   emptyMessage = "Upload a CSV in Data Upload to see traffic here.",
 }: TrafficChartProps) {
+  const responsiveHeight = useChartHeight();
+  const chartHeight = height ?? responsiveHeight;
   const {
     trafficUploads,
     activeUpload,
@@ -67,7 +70,7 @@ export function TrafficChart({
     return (
       <div
         className="panel-subtle flex items-center justify-center text-[var(--text-muted)]"
-        style={{ height }}
+        style={{ height: chartHeight }}
       >
         <p className="max-w-md px-4 text-center text-sm">
           {emptyMessage}{" "}
@@ -83,7 +86,7 @@ export function TrafficChart({
     return (
       <div
         className="panel-subtle flex flex-col items-center justify-center gap-2 text-[var(--text-muted)]"
-        style={{ height }}
+        style={{ height: chartHeight }}
       >
         <p>Dataset loaded ({activeUpload.rows.length} rows) but no values for this metric.</p>
         {showControls && availableMetrics.length > 1 && (
@@ -96,14 +99,14 @@ export function TrafficChart({
   return (
     <div>
       {showControls && trafficUploads.length > 0 && (
-        <div className="mb-4 flex flex-wrap items-center gap-4">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
           {trafficUploads.length > 1 && (
-            <label className="text-sm text-[var(--text-muted)]">
+            <label className="block w-full text-sm text-[var(--text-muted)] sm:w-auto">
               Dataset
               <select
                 value={activeUpload.id}
                 onChange={(e) => setSelectedUploadId(e.target.value)}
-                className="input-field ml-2 !mt-0 inline-block w-auto py-1.5"
+                className="input-field mt-1 w-full sm:ml-2 sm:!mt-0 sm:inline-block sm:w-auto sm:py-1.5"
               >
                 {trafficUploads.map((u) => (
                   <option key={u.id} value={u.id}>
@@ -114,12 +117,12 @@ export function TrafficChart({
             </label>
           )}
           {availableMetrics.length > 1 && (
-            <label className="text-sm text-[var(--text-muted)]">
+            <label className="block w-full text-sm text-[var(--text-muted)] sm:w-auto">
               Metric
               <select
                 value={availableMetrics.includes(metric) ? metric : availableMetrics[0]}
                 onChange={(e) => setMetric(e.target.value)}
-                className="input-field ml-2 !mt-0 inline-block w-auto py-1.5"
+                className="input-field mt-1 w-full sm:ml-2 sm:!mt-0 sm:inline-block sm:w-auto sm:py-1.5"
               >
                 {availableMetrics.map((m) => (
                   <option key={m} value={m}>
@@ -137,25 +140,27 @@ export function TrafficChart({
 
       {showLegend && <EventLegend />}
 
-      <div className="panel overflow-hidden p-3" style={{ height }}>
+      <div className="panel overflow-hidden p-2 sm:p-3" style={{ height: chartHeight }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={chartData}
-            margin={{ top: CHART_TOP_MARGIN, right: 24, left: 8, bottom: 56 }}
+            margin={{ top: CHART_TOP_MARGIN, right: 8, left: 0, bottom: 48 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
             <XAxis
               dataKey="date"
-              tick={{ fill: "#737373", fontSize: 10 }}
+              tick={{ fill: "#737373", fontSize: 9 }}
               angle={-35}
               textAnchor="end"
-              height={56}
+              height={48}
               interval="preserveStartEnd"
+              minTickGap={12}
               axisLine={{ stroke: "var(--border)" }}
               tickLine={{ stroke: "var(--border)" }}
             />
             <YAxis
-              tick={{ fill: "#737373", fontSize: 11 }}
+              width={40}
+              tick={{ fill: "#737373", fontSize: 10 }}
               axisLine={{ stroke: "var(--border)" }}
               tickLine={{ stroke: "var(--border)" }}
             />

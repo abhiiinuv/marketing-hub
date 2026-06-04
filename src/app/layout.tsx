@@ -24,6 +24,11 @@ export const metadata: Metadata = {
   description: "Internal marketing planning for your team",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

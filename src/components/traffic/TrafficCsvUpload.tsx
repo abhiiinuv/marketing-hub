@@ -40,7 +40,7 @@ export function TrafficCsvUpload() {
   const latest = trafficUploads[0];
 
   return (
-    <div className="panel max-w-xl p-6">
+    <div className="panel w-full max-w-xl p-4 sm:p-6">
       <label className="block text-sm font-medium text-white">Traffic CSV</label>
       <p className="mt-1 mb-4 text-sm leading-relaxed text-[var(--text-muted)]">
         Supports date-per-row exports or wide formats (dates as columns). The dashboard chart

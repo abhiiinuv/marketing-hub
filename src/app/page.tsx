@@ -19,12 +19,12 @@ export default function DashboardPage() {
         description="Traffic from your latest CSV. Hover a point for a preview, click for full details."
       />
 
-      <TrafficChart height={520} showControls showLegend />
+      <TrafficChart showControls showLegend />
 
-      <section className="relative mt-12">
+      <section className="relative mt-8 sm:mt-12">
         <div className="pointer-events-none absolute -left-8 top-0 h-32 w-48 rounded-full bg-[var(--traycer-teal-glow)] blur-3xl" aria-hidden />
-        <div className="relative mb-4 flex items-center justify-between">
-          <h2 className="font-serif text-2xl font-normal text-white">Upcoming</h2>
+        <div className="relative mb-4 flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-serif text-xl font-normal text-white sm:text-2xl">Upcoming</h2>
           <Link href="/calendar" className="link-teal text-sm hover:underline">
             Full calendar →
           </Link>

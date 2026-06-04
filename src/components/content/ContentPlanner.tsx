@@ -36,13 +36,13 @@ export function ContentPlanner() {
 
   return (
     <div>
-      <div className="mb-6 flex flex-wrap gap-2">
+      <div className="mb-6 flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible">
         {tabs.map((t) => (
           <button
             key={t.id}
             type="button"
             onClick={() => setTab(t.id)}
-            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+            className={`shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
               tab === t.id
                 ? "bg-[var(--traycer-teal-dark)]/50 text-white ring-1 ring-[var(--traycer-teal-muted)]/40"
                 : "bg-[var(--surface)] text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-white"
@@ -72,10 +72,10 @@ function SectionShell({
   const { canEdit } = useAuth();
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="font-serif text-xl text-white">{title}</h2>
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="font-serif text-xl text-white sm:text-xl">{title}</h2>
         {canEdit ? (
-          <button type="button" onClick={onAdd} className="btn-primary text-sm">
+          <button type="button" onClick={onAdd} className="btn-primary w-full text-sm sm:w-auto">
             Add new
           </button>
         ) : (
@@ -410,16 +410,16 @@ function ItemList({
       {items.map((item) => (
         <div
           key={item.id}
-          className="flex items-center justify-between panel px-4 py-3"
+          className="flex flex-col gap-3 panel px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
         >
-          <div>
+          <div className="min-w-0">
             <p className="font-medium text-zinc-100">{item.title}</p>
             <p className="text-xs text-zinc-500">
               {item.date.slice(0, 10)}
               {item.extra ? ` · ${item.extra}` : ""}
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             {item.status && <Badge label={item.status} />}
             {canEdit && (
               <>

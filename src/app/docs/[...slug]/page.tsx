@@ -3,6 +3,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import { getAllDocSlugs, getDocBySlug } from "@/lib/docs";
 import { mdxComponents } from "@/components/docs/mdx-components";
+import { DocsEditWrapper } from "@/components/docs/DocsEditWrapper";
 
 type Props = {
   params: Promise<{ slug: string[] }>;
@@ -34,9 +35,14 @@ export default async function DocPage({ params }: Props) {
         {doc.frontmatter.title}
       </h1>
       {doc.frontmatter.description && (
-        <p className="mb-8 text-base text-[var(--text-muted)]">{doc.frontmatter.description}</p>
+        <p className="mb-6 text-base text-[var(--text-muted)]">{doc.frontmatter.description}</p>
       )}
-      <div className="doc-body">
+
+      {/* Client wrapper: shows edit toolbar for admins + Firestore overrides */}
+      <DocsEditWrapper slug={slug} fileContent={doc.content} />
+
+      {/* Server-rendered file content (always present; hidden by CSS when override active) */}
+      <div className="doc-body doc-file-content">
         <MDXRemote
           source={doc.content}
           components={mdxComponents}

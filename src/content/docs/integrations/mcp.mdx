@@ -1,0 +1,41 @@
+---
+title: "MCP"
+description: "Connect external tools and data sources through Model Context Protocol servers."
+keywords: ["mcp", "model context protocol", "tools", "integrations"]
+---
+
+MCP lets agents use external tools and data sources from within Traycer workflows.
+
+## What MCP Adds
+
+MCP tools can help agents:
+
+- read external project data
+- call productivity tools
+- inspect issue trackers
+- query documentation
+- perform controlled actions outside the repository
+
+## Add an MCP Server
+
+<Steps>
+  <Step title="Open integrations">
+    Go to the MCP section in Traycer settings.
+  </Step>
+  <Step title="Add a server">
+    Provide the server URL and any required authentication.
+  </Step>
+  <Step title="Select tools">
+    Enable only the tools your agents should be allowed to use.
+  </Step>
+  <Step title="Use in chats">
+    Start or continue an agent session with the configured MCP tools available.
+  </Step>
+</Steps>
+
+## Practical Guidance
+
+- Keep tool access narrow.
+- Prefer read-only tools unless an action is necessary.
+- Document project-specific MCP expectations in repository instructions.
+- Review tool output before handing work to another agent.

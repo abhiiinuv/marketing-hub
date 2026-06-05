@@ -1,0 +1,36 @@
+---
+title: "Spec-Driven Development"
+description: "Use specs to preserve intent before agents implement code."
+keywords: ["spec-driven development", "specs", "requirements", "ai coding"]
+---
+
+Spec-driven development is a workflow inside Traycer, especially useful in Epic Mode.
+
+The idea is simple: capture the important intent before asking agents to change code.
+
+## Why Specs Help
+
+Agents can infer code structure, but they cannot reliably infer product intent, business constraints, release risks, or decisions that were made outside the repository.
+
+Specs preserve:
+
+- what the user actually wants
+- why the work matters
+- non-obvious constraints
+- accepted tradeoffs
+- API and compatibility rules
+- verification expectations
+
+## Spec Size
+
+Prefer focused specs. A small spec about authentication behavior is easier for an agent to use than one large document covering the entire application.
+
+## From Spec to Work
+
+After a spec is stable:
+
+1. Break it into tickets.
+2. Assign a ticket to an agent.
+3. Review the implementation against the spec.
+4. Update the spec if new constraints are discovered.
+5. Hand off follow-up work with the spec and ticket context attached.

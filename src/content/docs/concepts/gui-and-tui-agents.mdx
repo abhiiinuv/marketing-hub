@@ -1,0 +1,38 @@
+---
+title: "GUI and TUI Agents"
+description: "Traycer supports both rich chat agents and terminal-backed agents."
+keywords: ["gui agents", "tui agents", "terminal agents", "claude code", "codex", "opencode"]
+---
+
+Traycer supports two agent surfaces.
+
+## GUI Agents
+
+GUI agents run inside Traycer chat tabs. They are useful when you want a structured message history, rich tool output, file-change summaries, approvals, todos, and context controls.
+
+Use GUI agents for:
+
+- exploratory coding sessions
+- planning and implementation with visible intermediate state
+- reviewing accumulated changes
+- agent-to-agent coordination
+- keeping work inside the Epic canvas
+
+## TUI Agents
+
+TUI agents run in terminal-backed tabs. They are useful when the provider's native terminal experience is the right interface or when you want to interact with a CLI directly.
+
+Use TUI agents for:
+
+- native Claude Code, Codex, or OpenCode sessions
+- workflows that depend on terminal interaction
+- provider-specific CLI behavior
+- long implementation runs that benefit from a terminal transcript
+
+## Choosing a Surface
+
+Use a GUI agent when the conversation, context, and artifact state should stay visually organized in Traycer.
+
+Use a TUI agent when the provider's terminal interface is the workflow you want to preserve.
+
+Both surfaces can participate in the same Epic, and work can move between them through handoffs.

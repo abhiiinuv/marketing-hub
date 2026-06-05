@@ -1,0 +1,49 @@
+---
+title: "CLI Reference"
+description: "Common Traycer CLI commands for login, configuration, and agent communication."
+keywords: ["cli", "traycer cli", "agent commands"]
+---
+
+The Traycer CLI supports account setup, local configuration, and agent-to-agent communication for Traycer-launched sessions.
+
+## Account Commands
+
+| Command | Purpose |
+| --- | --- |
+| `traycer login` | Sign in from the CLI. |
+| `traycer logout` | Clear local CLI credentials. |
+| `traycer whoami` | Show the current authenticated account. |
+
+## Configuration Commands
+
+| Command | Purpose |
+| --- | --- |
+| `traycer config shell get` | Show shell configuration. |
+| `traycer config shell set` | Set shell configuration. |
+| `traycer config shell reset` | Reset shell configuration. |
+| `traycer config env list` | List configured environment overrides. |
+| `traycer config env set` | Set an environment override. |
+| `traycer config env delete` | Delete an environment override. |
+
+## Agent Commands
+
+Traycer-launched sessions receive `TRAYCER_AGENT_ID` and `TRAYCER_EPIC_ID`, so agent commands usually work without explicit ids.
+
+| Command | Purpose |
+| --- | --- |
+| `traycer agent list` | List agents in the current Epic. |
+| `traycer agent create` | Create a child agent. |
+| `traycer agent send` | Send a message to another agent. |
+| `traycer agent transcript` | Read an agent transcript when available. |
+| `traycer agent selection-guide` | Read child-agent selection guidance. |
+| `traycer agent list-harness-models` | List model choices for a harness. |
+
+## Agent Command Pattern
+
+Use agent commands when a terminal-backed agent needs to coordinate with another agent in the same Epic.
+
+```bash
+traycer agent list
+traycer agent create --harness codex --agent-mode epic
+traycer agent send --to-agent-id <agent-id> --message "Please review this diff." --expect-reply
+```

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import {
+  FaBook,
   FaCalendarDays,
   FaCloudArrowUp,
   FaHandshake,
@@ -18,6 +19,7 @@ const links = [
   { href: "/collabs", label: "YouTuber Collabs", icon: FaHandshake },
   { href: "/content", label: "Content Planner", icon: FaPenToSquare },
   { href: "/traffic", label: "Data Upload", icon: FaCloudArrowUp },
+  { href: "/docs", label: "Traycer Docs", icon: FaBook },
 ];
 
 export function Sidebar({
@@ -68,7 +70,7 @@ export function Sidebar({
 
         <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto">
           {links.map(({ href, label, icon: Icon }) => {
-            const active = pathname === href;
+            const active = href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/");
             return (
               <Link
                 key={href}

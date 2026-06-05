@@ -1,0 +1,24 @@
+---
+title: "Cursor"
+description: "Use Cursor with Traycer GUI chats through a Cursor API key."
+keywords: ["cursor", "api key", "provider"]
+---
+
+Traycer supports Cursor as a GUI chat provider.
+
+## Setup
+
+1. Create a Cursor API key from your Cursor dashboard.
+2. Open **Settings -> Providers**.
+3. Select **Cursor**.
+4. Enable the provider.
+5. Paste and save the API key, or expose `CURSOR_API_KEY` from your shell.
+6. Refresh provider availability.
+
+## How Cursor Auth Works
+
+Cursor uses API-key authentication for Traycer GUI chats. The saved key is not displayed back to the UI. Traycer only shows whether a key is configured and, when available, account metadata from Cursor.
+
+## Current Surface
+
+Cursor is exposed as a GUI agent in Traycer. Its terminal surface is hidden until the CLI path has the same workflow guarantees as the GUI surface.

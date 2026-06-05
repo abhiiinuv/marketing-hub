@@ -1,0 +1,155 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Traycer AI",
+  "colors": {
+    "primary": "#454545",
+    "light": "#ffffff",
+    "dark": "#454545"
+  },
+  "favicon": {
+    "light": "/favicons/favicon-light.svg",
+    "dark": "/favicons/favicon-dark.svg"
+  },
+  "navigation": {
+    "pages": [
+      "index",
+      "quickstart",
+      {
+        "group": "Getting Started",
+        "pages": [
+          "getting-started/install",
+          "getting-started/connect-providers",
+          "getting-started/import-existing-subscriptions",
+          "getting-started/first-chat",
+          "getting-started/first-epic"
+        ]
+      },
+      {
+        "group": "Concepts",
+        "pages": [
+          "concepts/open-source",
+          "concepts/ai-to-ai-handoffs",
+          "concepts/agent-to-agent-communication",
+          "concepts/workspaces-and-tabs",
+          "concepts/gui-and-tui-agents"
+        ]
+      },
+      {
+        "group": "Agents",
+        "pages": [
+          "agents/overview",
+          "agents/supported-agents",
+          "agents/provider-setup",
+          "agents/gui-agents",
+          "agents/tui-agents",
+          "agents/regular-vs-epic-mode",
+          "agents/agent-handoffs",
+          "agents/agent-to-agent-protocol"
+        ]
+      },
+      {
+        "group": "Epics",
+        "pages": [
+          "epics/overview",
+          "epics/shared-context",
+          "epics/specs-and-tickets",
+          "epics/nested-tabs",
+          "epics/chats-and-terminal-tabs",
+          "epics/executions",
+          "epics/reviews-and-diffs"
+        ]
+      },
+      {
+        "group": "Workflows",
+        "pages": [
+          "workflows/regular-mode",
+          "workflows/epic-mode",
+          "workflows/spec-driven-development",
+          "workflows/review-workflows",
+          "workflows/verification"
+        ]
+      },
+      {
+        "group": "Integrations",
+        "pages": [
+          "integrations/claude-code",
+          "integrations/codex",
+          "integrations/opencode",
+          "integrations/cursor",
+          "integrations/custom-providers",
+          "integrations/mcp"
+        ]
+      },
+      {
+        "group": "Reference",
+        "pages": [
+          "reference/cli",
+          "reference/settings",
+          "reference/permissions",
+          "reference/keyboard-shortcuts",
+          "reference/troubleshooting"
+        ]
+      },
+      {
+        "group": "Contributing",
+        "pages": [
+          "contributing/overview",
+          "contributing/local-development",
+          "contributing/architecture"
+        ]
+      }
+    ]
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Discord",
+        "href": "https://traycer.ai/discord"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "GitHub",
+      "href": "https://github.com/traycerai"
+    }
+  },
+  "contextual": {
+    "options": ["copy", "view", "chatgpt"]
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/TraycerAI",
+      "github": "https://github.com/traycerai",
+      "linkedin": "https://linkedin.com/company/traycer",
+      "website": "https://traycer.ai",
+      "discord": "https://traycer.ai/discord",
+      "bluesky": "https://bsky.app/profile/traycerai.bsky.social"
+    }
+  },
+  "interaction": {
+    "drilldown": false
+  },
+  "seo": {
+    "indexing": "all",
+    "metatags": {
+      "title": "Traycer: Open Source AI Agent Workspace",
+      "description": "Traycer is an open-source, free AI development workspace for coordinating coding agents, preserving context, and handing work between models without starting over.",
+      "keywords": "Traycer AI, open source AI coding, coding agents, agent orchestration, AI handoffs, agent-to-agent communication, Claude Code, Codex, OpenCode, Cursor, GUI agents, TUI agents, Epic mode, spec-driven development",
+      "author": "Traycer AI",
+      "og:site_name": "Traycer AI Documentation",
+      "og:url": "https://docs.traycer.ai",
+      "og:type": "website",
+      "og:title": "Traycer: Open Source AI Agent Workspace",
+      "og:description": "Coordinate coding agents, preserve project context, and keep AI development moving across models and surfaces.",
+      "twitter:site": "@TraycerAI",
+      "twitter:creator": "@TraycerAI",
+      "twitter:title": "Traycer: Open Source AI Agent Workspace",
+      "twitter:description": "Open-source agent workspace for AI handoffs, agent collaboration, and persistent project context."
+    }
+  }
+}

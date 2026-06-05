@@ -1,0 +1,30 @@
+---
+title: "Supported Agents"
+description: "Providers and agent surfaces supported by Traycer."
+keywords: ["supported agents", "claude code", "codex", "opencode", "cursor"]
+---
+
+Traycer supports multiple coding-agent providers and surfaces.
+
+## Providers
+
+| Provider | GUI chat | Terminal agent | Notes |
+| --- | --- | --- | --- |
+| Claude Code | Yes | Yes | CLI-backed provider with strong terminal support. |
+| Codex | Yes | Yes | Supports GUI chat and terminal sessions. |
+| OpenCode | Yes | Yes | Supports OpenCode model/provider routing. |
+| Traycer | Yes | No | Traycer-managed harness built on the configured OpenCode runtime. |
+| Cursor | Yes | Hidden for now | GUI chat uses a Cursor API key. |
+
+## Availability
+
+Provider availability depends on your local setup:
+
+- CLI providers must have a working binary path.
+- Cursor needs a valid API key.
+- A disabled provider does not appear in the new-chat picker.
+- Some providers support fewer permission modes or model options than others.
+
+## Adding More Providers
+
+Use [Custom Providers](/integrations/custom-providers) when you need a project-specific or user-specific CLI integration that Traycer does not expose by default.

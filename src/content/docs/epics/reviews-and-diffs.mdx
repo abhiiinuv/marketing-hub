@@ -1,0 +1,36 @@
+---
+title: "Reviews and Diffs"
+description: "Inspect agent changes and keep implementation aligned with project intent."
+keywords: ["reviews", "diffs", "verification", "code review"]
+---
+
+Reviews and diffs close the loop between agent output and project intent.
+
+## Diff Views
+
+Diff views help you inspect:
+
+- changed files
+- file-level patches
+- binary or unsupported-file placeholders
+- repository state
+- selected worktrees
+- implementation scope
+
+Use diffs before asking another agent to continue. A precise diff is often better context than a long summary.
+
+## Review Artifacts
+
+Review artifacts capture findings in a durable form. They are useful when:
+
+- an implementation needs follow-up
+- acceptance criteria are not met
+- tests are missing
+- behavior changed unexpectedly
+- another agent should fix a focused set of issues
+
+## Verification
+
+Verification checks whether implementation matches the captured intent. It should focus on correctness, regressions, missing tests, and gaps between specs and code.
+
+See [Verification](/workflows/verification).

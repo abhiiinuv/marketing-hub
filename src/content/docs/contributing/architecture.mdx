@@ -1,0 +1,33 @@
+---
+title: "Architecture"
+description: "High-level monorepo architecture for Traycer contributors."
+keywords: ["architecture", "monorepo", "workspaces"]
+---
+
+Traycer is organized as a monorepo with shared protocol and client/server workspaces.
+
+## Key Workspaces
+
+| Workspace | Purpose |
+| --- | --- |
+| `traycer-clients/gui-app/` | Standalone React app shell for the Traycer workspace UI. |
+| `traycer-clients/desktop/` | Desktop host, native windowing, and app packaging. |
+| `traycer-clients/mobile/` | Mobile shell using the shared app surface. |
+| `traycer-clients/traycer-cli/` | CLI for auth, config, local runtime management, and agent commands. |
+| `protocol/` | Shared protocol contracts and schemas. |
+| `packages/common/` | Shared clients, types, errors, logging, and utilities. |
+| `traycer-server/` | Server APIs for cloud-backed data and inference routing. |
+| `authn-v3/` | Authentication service. |
+| `cloud-ui-v2/` | Web dashboard. |
+
+## Protocol First
+
+Traycer uses shared protocol schemas for cross-process behavior. When adding or changing agent, Epic, terminal, or provider behavior, update the protocol contract first and keep renderer/server/runtime code aligned.
+
+## Agent Architecture
+
+Agents are represented through a common harness model. Providers can expose GUI chat surfaces, terminal surfaces, or both. Agent-to-agent communication uses explicit protocol methods for discovery, child-agent creation, messaging, transcript access, and stopping active work.
+
+## Epic Architecture
+
+An Epic is the shared workspace model. It contains artifacts, chats, terminal-agent records, workspace context, diffs, reviews, and execution state. The UI projects this into nested tabs so each work surface has focused state while sharing the Epic context.

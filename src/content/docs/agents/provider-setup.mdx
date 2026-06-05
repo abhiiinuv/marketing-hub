@@ -1,0 +1,41 @@
+---
+title: "Provider Setup"
+description: "Configure provider binaries, API keys, default arguments, and availability."
+keywords: ["provider setup", "settings", "cli path", "api key"]
+---
+
+Provider setup lives in **Settings -> Providers**.
+
+## Runtime Selection
+
+For CLI providers, Traycer shows:
+
+- bundled or detected candidates when available
+- custom paths you add
+- version probe results
+- enabled or disabled state
+- provider account metadata when the provider exposes it
+
+Choose the binary that should run for the provider. Add a custom path if Traycer cannot auto-detect it.
+
+## API-Key Providers
+
+Cursor uses an API key for GUI chats. Save the key in the Cursor provider settings, or expose `CURSOR_API_KEY` from your shell.
+
+The key is not displayed back to the UI after saving. Traycer only reports whether a key is configured and where it came from.
+
+## Terminal Agent Arguments
+
+Terminal-capable providers can accept additional launch arguments. Use this for provider-specific flags you want Traycer to pass whenever it opens a terminal agent.
+
+Keep these arguments provider-safe. A flag that grants broad permissions should be treated as a deliberate workflow choice.
+
+## Troubleshooting
+
+If a provider does not appear in the picker:
+
+- confirm it is enabled
+- refresh provider availability
+- verify the CLI path works in your shell
+- check whether the provider requires an API key
+- inspect [Troubleshooting](/reference/troubleshooting)

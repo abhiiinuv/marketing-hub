@@ -1,0 +1,30 @@
+---
+title: "TUI Agents"
+description: "Run terminal-backed coding agents inside Traycer."
+keywords: ["tui agents", "terminal agents", "claude code", "codex", "opencode"]
+---
+
+TUI agents are terminal-backed agent sessions. They let you keep the provider's native terminal interface while still working inside a Traycer workspace.
+
+## Capabilities
+
+TUI agents can:
+
+- launch from an Epic
+- use the selected provider and model
+- inherit relevant workspace context
+- preserve a terminal transcript while the tab is alive
+- participate in handoff workflows where supported
+
+## Supported Providers
+
+Terminal agents currently target CLI-based providers such as Claude Code, Codex, and OpenCode. Cursor's terminal surface is not exposed in the app until its CLI behavior matches the GUI workflow expectations.
+
+## When to Use TUI Agents
+
+Use a TUI agent when:
+
+- you prefer the provider's native terminal interface
+- the provider has CLI-specific commands or workflows
+- implementation needs close terminal interaction
+- you want to preserve a terminal session alongside specs, chats, and diffs

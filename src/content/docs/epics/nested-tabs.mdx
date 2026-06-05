@@ -1,0 +1,42 @@
+---
+title: "Nested Tabs"
+description: "Organize complex AI work with multiple tabs inside one Epic workspace."
+keywords: ["nested tabs", "workspace tabs", "epic tabs"]
+---
+
+An Epic can contain multiple nested tabs. Each tab keeps a focused working surface while still belonging to the same shared workspace.
+
+## Tab Types
+
+An Epic can include:
+
+- chat tabs
+- terminal agent tabs
+- spec tabs
+- ticket tabs
+- review tabs
+- file tabs
+- diff tabs
+
+## Why Use Multiple Tabs
+
+Use multiple tabs to avoid mixing unrelated concerns into one long conversation.
+
+For example:
+
+- one chat investigates the bug
+- another chat writes the implementation plan
+- a terminal agent performs the code change
+- a review tab captures findings
+- a diff tab inspects the result
+
+All of that can live inside the same Epic.
+
+## Practical Pattern
+
+Keep one tab per role:
+
+- **Planner**: clarify requirements and update specs.
+- **Implementer**: change code.
+- **Reviewer**: inspect the diff and raise issues.
+- **Verifier**: check behavior against acceptance criteria.

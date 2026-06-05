@@ -1,0 +1,43 @@
+---
+title: "Connect Providers"
+description: "Enable Claude Code, Codex, OpenCode, Cursor, and other coding-agent providers in Traycer."
+keywords: ["providers", "claude code", "codex", "opencode", "cursor", "settings"]
+---
+
+Providers are the agent backends Traycer can run. Configure them from **Settings -> Providers**.
+
+## Provider Setup
+
+<Steps>
+  <Step title="Open Providers settings">
+    Go to **Settings -> Providers**.
+  </Step>
+  <Step title="Choose a provider">
+    Select Claude Code, Codex, OpenCode, Traycer, or Cursor from the provider rail.
+  </Step>
+  <Step title="Enable it">
+    Turn on the provider. Disabled providers are hidden from the new-chat picker.
+  </Step>
+  <Step title="Select a runtime">
+    Use a detected CLI binary or add a custom path. Cursor uses an API key for GUI chats.
+  </Step>
+  <Step title="Refresh availability">
+    Refresh provider status after changing paths, shell config, or credentials.
+  </Step>
+</Steps>
+
+## Provider Types
+
+| Provider | Setup |
+| --- | --- |
+| Claude Code | Select a CLI path that can run `claude`. |
+| Codex | Select a CLI path that can run `codex`. |
+| OpenCode | Select a CLI path that can run `opencode`. |
+| Traycer | Uses the selected OpenCode-compatible runtime. |
+| Cursor | Save a Cursor API key or expose `CURSOR_API_KEY` in your shell. |
+
+## Permission Modes
+
+Providers advertise the permission modes they support. Traycer will disable choices a provider cannot honor.
+
+Use [Permissions](/reference/permissions) to understand the difference between supervised, auto-accept edits, and full access.

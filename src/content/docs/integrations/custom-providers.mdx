@@ -1,0 +1,35 @@
+---
+title: "Custom Providers"
+description: "Add custom CLI-based providers and workspace-specific agent commands."
+keywords: ["custom providers", "custom cli", "agent integration"]
+---
+
+Use custom providers when your workflow depends on a CLI agent or wrapper that Traycer does not expose directly.
+
+## When to Use a Custom Provider
+
+- Your team uses a private agent wrapper.
+- You need project-specific launch flags.
+- You want a safer preset for a provider.
+- You want a more permissive preset for controlled environments.
+- You need a custom shell script around an existing CLI.
+
+## Scopes
+
+Custom provider configuration can be:
+
+- **User-scoped**: available across your local projects.
+- **Workspace-scoped**: stored with the project so the team can share it.
+
+## Template Inputs
+
+Custom providers should pass the Traycer prompt or prompt file to the target CLI. Common runtime inputs include:
+
+- prompt content
+- temporary prompt file path
+- workspace path
+- agent or Epic identifiers when launched inside an Epic
+
+## Safety
+
+Treat custom provider scripts as executable code. Review flags that grant broad file or command permissions before sharing them with a team.

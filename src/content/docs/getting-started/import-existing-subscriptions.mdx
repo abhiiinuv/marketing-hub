@@ -1,0 +1,31 @@
+---
+title: "Import Existing Subscriptions"
+description: "Use your existing Claude Code, Codex, OpenCode, and Cursor access with Traycer."
+keywords: ["subscriptions", "claude code", "codex", "opencode", "cursor", "bring your own account"]
+---
+
+Traycer can use agent access you already have. You do not need to buy a separate Traycer model plan to start using the app.
+
+## Supported Sources
+
+- **Claude Code**: use your existing CLI login.
+- **Codex**: use your existing CLI login.
+- **OpenCode**: use your existing OpenCode configuration.
+- **Cursor**: use a Cursor API key for GUI chat support.
+
+## How Import Works
+
+Traycer does not copy provider credentials into a shared account. It connects to each provider through that provider's normal local setup:
+
+- CLI providers use the selected binary and the provider's existing auth state.
+- API-key providers store the key locally and send only provider-safe status back to the UI.
+- Provider account metadata, when available, is shown so you can confirm which account is active.
+
+## When to Use This
+
+Use existing access when:
+
+- you already pay for a provider directly
+- your team standardizes on a specific coding agent
+- you want to compare agents without changing your billing setup
+- you want Traycer to coordinate multiple providers in one workspace

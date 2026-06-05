@@ -1,0 +1,38 @@
+---
+title: "Agent Handoffs"
+description: "Move work between agents while preserving the state needed to continue."
+keywords: ["agent handoff", "ai handoff", "model handoff"]
+---
+
+Agent handoffs move a workflow from one agent to another without forcing you to rebuild context manually.
+
+## What Can Be Handed Off
+
+Depending on the source and destination, a handoff can include:
+
+- the latest user goal
+- conversation state
+- selected specs and tickets
+- relevant files
+- current implementation status
+- review findings
+- model and permission preferences
+- next-step instructions
+
+## Useful Handoffs
+
+- Claude Code to Codex for a second implementation pass.
+- Codex to Claude Code for terminal-native follow-up.
+- OpenCode to Cursor when Cursor's API flow is preferred.
+- Regular Mode to Epic Mode when the work grows.
+- Implementation chat to review chat after code changes.
+
+## Handoff Quality
+
+Good handoffs are explicit. Tell the receiving agent:
+
+- what has already happened
+- what still needs to happen
+- which constraints must not change
+- where uncertainty remains
+- whether it should ask another agent for clarification

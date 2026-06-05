@@ -1,0 +1,36 @@
+---
+title: "Agent-to-Agent Protocol"
+description: "The Traycer protocol surface agents use to spawn, message, inspect, and coordinate with other agents."
+keywords: ["agent-to-agent protocol", "a2a", "agent.create", "agent.sendMessage"]
+---
+
+Traycer's agent-to-agent protocol is the coordination layer agents use inside an Epic.
+
+## Core Methods
+
+| Method | Purpose |
+| --- | --- |
+| `agent.create` | Create a child agent for delegated work. |
+| `agent.list` | List agents reachable in the current Epic. |
+| `agent.sendMessage` | Send another agent a message and optionally request a reply. |
+| `agent.getTranscript` | Read an agent transcript when available. |
+| `agent.stop` | Stop an active agent, optionally including its delegated subtree. |
+| `agent.selectionGuide` | Read guidance for choosing child agents. |
+| `agent.listHarnessModels` | Inspect model choices for a target harness. |
+
+## Message Threads
+
+`agent.sendMessage` supports two important fields:
+
+- `expectReply`: whether the receiver should answer.
+- `responseId`: the id used to correlate a reply with the original request.
+
+This lets agents ask a real question instead of dropping static text into another context.
+
+## Child Agents
+
+An agent can create a child agent and then message it with delegated work. The child records its parent, so Traycer can represent delegation lineage and stop related active work when needed.
+
+## GUI and TUI Support
+
+GUI agents can participate through provider-native tools. TUI participation depends on whether the terminal provider exposes a supported inbox and reply path.

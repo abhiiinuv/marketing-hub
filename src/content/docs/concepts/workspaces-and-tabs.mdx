@@ -1,0 +1,40 @@
+---
+title: "Workspaces and Tabs"
+description: "Every Epic is a persistent workspace with nested tabs and shared context."
+keywords: ["workspace", "tabs", "epic", "persistent context"]
+---
+
+Traycer is organized around persistent workspaces. Instead of collapsing a project into one long conversation, an Epic can contain multiple nested tabs that each represent a focused part of the work.
+
+## Workspace Shape
+
+An Epic can contain:
+
+- specs
+- tickets
+- GUI chat tabs
+- terminal agent tabs
+- file views
+- git diffs
+- review artifacts
+- implementation notes
+
+Each tab keeps its own state while sharing the Epic's broader context.
+
+## Why Nested Tabs Matter
+
+Large AI projects are hard to manage in one transcript. Nested tabs let you keep related work close without mixing every concern into one chat.
+
+Use separate tabs for:
+
+- requirements discovery
+- technical planning
+- implementation
+- bug investigation
+- review
+- verification
+- terminal-backed agent runs
+
+## Shared Context
+
+The Epic is the container. Chats and agents inside it can reference the same specs, tickets, decisions, files, and prior work. That shared context is what makes handoffs and agent-to-agent communication useful: every participant operates from the same project workspace.

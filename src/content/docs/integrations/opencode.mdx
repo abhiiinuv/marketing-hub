@@ -1,0 +1,30 @@
+---
+title: "OpenCode"
+description: "Use OpenCode with Traycer and route work through OpenCode-compatible providers."
+keywords: ["opencode", "provider", "models"]
+---
+
+Traycer can use OpenCode as both a GUI agent and a terminal-backed agent.
+
+## Setup
+
+1. Install and configure OpenCode.
+2. Open **Settings -> Providers**.
+3. Select **OpenCode**.
+4. Enable the provider.
+5. Choose a detected CLI binary or add a custom path.
+6. Refresh provider availability.
+
+## Model Routing
+
+OpenCode can expose models from multiple upstream providers. Traycer shows the available model list reported by the OpenCode runtime and lets you choose the model for each agent session.
+
+## Traycer Provider
+
+The **Traycer** provider uses an OpenCode-compatible runtime selected in provider settings. Configure OpenCode first if the Traycer provider cannot find a usable runtime.
+
+## Tips
+
+- Confirm OpenCode works in your terminal before configuring Traycer.
+- Use model search when OpenCode exposes many upstream models.
+- Use terminal agents for native OpenCode CLI workflows.

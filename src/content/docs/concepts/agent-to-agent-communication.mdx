@@ -1,0 +1,40 @@
+---
+title: "Agent-to-Agent Communication"
+description: "Traycer lets agents communicate dynamically instead of passing static text between isolated generations."
+keywords: ["agent-to-agent", "a2a", "multi-agent", "agent communication"]
+---
+
+Most multi-agent workflows are not truly collaborative. One agent writes output, another agent receives static text, and there is no feedback loop when the second agent needs clarification.
+
+Traycer introduces an agent-to-agent communication layer so agents can coordinate inside a shared project workspace.
+
+## What Agents Can Do
+
+Agents can:
+
+- discover other agents in the same Epic
+- inspect their own identity
+- create child agents for delegated work
+- send messages to another agent
+- request a reply
+- respond to a pending request
+- inspect another agent transcript when allowed
+- stop active child work when needed
+
+This gives agents a way to ask questions, request clarification, synchronize context, and split work without forcing the user to manually relay every message.
+
+## Communication Model
+
+Agent-to-agent communication is explicit. A sender chooses a receiver, sends a message, and can request a reply. Replies are correlated so the workflow can distinguish one-off notifications from open questions.
+
+For example:
+
+1. A planning agent creates a child implementation agent.
+2. The implementation agent finds an API ambiguity.
+3. It messages the planning agent and requests clarification.
+4. The planning agent replies with the decision and updates the shared context.
+5. The implementation continues without the user rebuilding the thread manually.
+
+## Where This Fits
+
+Agent-to-agent communication is most useful inside Epics, where multiple chats, terminal agents, specs, tickets, and reviews share the same workspace context.

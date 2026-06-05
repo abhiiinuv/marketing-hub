@@ -1,0 +1,41 @@
+---
+title: "Verification"
+description: "Verify that implementation matches the captured plan, spec, or ticket."
+keywords: ["verification", "acceptance criteria", "review"]
+---
+
+Verification checks whether implementation actually satisfies the intended outcome.
+
+## Verification Inputs
+
+Good verification needs:
+
+- the implemented diff
+- the original request
+- relevant specs
+- relevant tickets
+- acceptance criteria
+- test output when available
+
+## What to Ask
+
+Ask a verifier to check:
+
+- Does the implementation solve the stated problem?
+- Are acceptance criteria met?
+- Are there missing tests?
+- Did the agent change unrelated behavior?
+- Are edge cases handled?
+- Is another handoff needed?
+
+## Verification Output
+
+Verification should produce focused findings:
+
+- blocking issues
+- non-blocking concerns
+- suggested fixes
+- tests to run or add
+- confidence level
+
+The best verification output is actionable enough to hand directly to another agent.

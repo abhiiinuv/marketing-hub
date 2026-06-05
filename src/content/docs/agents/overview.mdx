@@ -1,0 +1,41 @@
+---
+title: "Agents Overview"
+description: "How Traycer coordinates coding agents across GUI chats, terminal sessions, handoffs, and Epics."
+keywords: ["agents", "coding agents", "agent orchestration"]
+---
+
+Agents are the execution layer in Traycer. They can run as GUI chats, terminal-backed sessions, or delegated child agents inside an Epic.
+
+## What Traycer Adds
+
+Traycer gives agents:
+
+- shared project context
+- persistent workspace state
+- provider and model selection
+- permission controls
+- structured handoffs
+- agent-to-agent messaging
+- review and verification loops
+
+The goal is not to replace your preferred coding agent. The goal is to make multiple agents work inside one coherent development workspace.
+
+## Agent Surfaces
+
+<CardGroup cols={2}>
+  <Card title="GUI Agents" icon="comments" href="/agents/gui-agents">
+    Rich chat sessions with tool output, change summaries, approvals, todos, and context controls.
+  </Card>
+  <Card title="TUI Agents" icon="terminal" href="/agents/tui-agents">
+    Terminal-backed sessions that preserve the provider's native CLI experience.
+  </Card>
+</CardGroup>
+
+## Agent Modes
+
+Agents can run in:
+
+- **Regular Mode**: direct coding-agent work with Traycer context.
+- **Epic Mode**: structured work against specs, tickets, and shared Epic context.
+
+See [Regular vs Epic Mode](/agents/regular-vs-epic-mode).

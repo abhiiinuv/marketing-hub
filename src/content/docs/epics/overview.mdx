@@ -1,0 +1,41 @@
+---
+title: "Epics Overview"
+description: "Epics are persistent Traycer workspaces for specs, tickets, chats, agents, reviews, and implementation state."
+keywords: ["epic", "epic mode", "workspace", "specs", "tickets"]
+---
+
+An Epic is a persistent workspace for project-sized AI development. It keeps the work organized across specs, tickets, chats, terminal agents, diffs, and reviews.
+
+Use an Epic when the work needs more than one conversation.
+
+## What an Epic Contains
+
+- specs for intent and design decisions
+- tickets for implementation slices
+- GUI chat tabs
+- terminal agent tabs
+- file and diff views
+- review artifacts
+- execution history
+- shared context for every agent in the workspace
+
+## Why Epics Exist
+
+AI agents drift when important context stays hidden in scattered chats. Epics preserve the "why", the constraints, and the current project state so agents can continue from the same source of truth.
+
+## Core Pages
+
+<CardGroup cols={2}>
+  <Card title="Shared Context" icon="diagram-project" href="/epics/shared-context">
+    How specs, tickets, chats, and agents use the same project context.
+  </Card>
+  <Card title="Specs and Tickets" icon="list-check" href="/epics/specs-and-tickets">
+    How to capture intent and break it into executable work.
+  </Card>
+  <Card title="Nested Tabs" icon="table-columns" href="/epics/nested-tabs">
+    How an Epic organizes multiple work surfaces.
+  </Card>
+  <Card title="Executions" icon="circle-play" href="/epics/executions">
+    How Traycer tracks agent work from handoff to result.
+  </Card>
+</CardGroup>

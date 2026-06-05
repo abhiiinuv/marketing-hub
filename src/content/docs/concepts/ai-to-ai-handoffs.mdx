@@ -1,0 +1,37 @@
+---
+title: "AI-to-AI Handoffs"
+description: "Move work from one model or agent to another while preserving context and project state."
+keywords: ["ai handoff", "model switching", "claude code", "codex", "opencode", "cursor"]
+---
+
+AI coding often loses momentum when you hit a limit, switch models, or need a different agent for the next step. Traditional handoff is manual: copy a prompt, paste some context, explain what happened, and hope the new model understands the state of the work.
+
+Traycer treats handoff as part of the workflow.
+
+## What a Handoff Preserves
+
+A Traycer handoff can carry:
+
+- the current goal
+- relevant conversation history
+- selected specs and tickets
+- workspace and repository context
+- accumulated implementation notes
+- review findings and next steps
+- model and permission settings when applicable
+
+The receiving agent starts with the context it needs instead of a static paragraph copied from another chat.
+
+## Common Handoff Patterns
+
+- **Rate limit recovery**: continue the work with another provider.
+- **Model specialization**: use one model for planning, another for implementation, and another for review.
+- **GUI to terminal**: start in a guided GUI chat, then hand implementation to a terminal-backed agent.
+- **Regular to Epic**: promote an ad hoc chat into a structured workspace when scope grows.
+- **Review handoff**: send findings back to an implementation agent with the relevant files and rationale.
+
+## Handoffs vs Prompt Copying
+
+Prompt copying gives the next model text. Traycer handoffs give the next model a place in the same project workflow.
+
+That difference matters when the work spans multiple turns, multiple files, and multiple agents. The receiving agent can continue from shared context instead of reconstructing the project from a pasted summary.

@@ -1,0 +1,31 @@
+---
+title: "Permissions"
+description: "Understand Traycer's agent permission modes."
+keywords: ["permissions", "supervised", "auto accept edits", "full access"]
+---
+
+Permission modes control how much autonomy an agent has when editing files or running commands.
+
+## Modes
+
+| Mode | Behavior |
+| --- | --- |
+| Supervised | Ask before commands and file changes. |
+| Auto-accept edits | Automatically approve file edits, ask before other actions. |
+| Full access | Allow commands and edits without prompts. |
+
+## Provider Support
+
+Not every provider supports every permission mode. Traycer disables modes the selected provider cannot honor.
+
+## Choosing a Mode
+
+Use **Supervised** for unfamiliar repositories, sensitive code, or early exploration.
+
+Use **Auto-accept edits** when you trust the agent to change files but still want command-level control.
+
+Use **Full access** only when the workflow and repository are safe for broad agent autonomy.
+
+## Handoffs
+
+Permission settings should be rechecked during handoffs. The right mode for a planning chat may not be the right mode for an implementation agent.

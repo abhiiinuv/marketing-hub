@@ -1,0 +1,45 @@
+---
+title: "Local Development"
+description: "Run Traycer locally from the monorepo."
+keywords: ["local development", "bun", "nx", "monorepo"]
+---
+
+Traycer is a Bun workspace monorepo with Nx task orchestration.
+
+## Install Dependencies
+
+```bash
+bun install
+```
+
+## Common Checks
+
+```bash
+bun run compile
+bun run lint
+bun run test
+```
+
+## Desktop Development
+
+```bash
+make dev-desktop
+```
+
+This starts the local desktop development stack.
+
+## Backend Services
+
+```bash
+make dev-services
+```
+
+Use this when you want to run the backend stack without the full desktop development loop.
+
+## Build
+
+```bash
+make build
+```
+
+Run this from the repository root.

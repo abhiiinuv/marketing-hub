@@ -1,0 +1,41 @@
+---
+title: "Shared Context"
+description: "Every Epic tab can work from the same captured project context."
+keywords: ["shared context", "epic context", "agent context"]
+---
+
+Shared context is the reason to use an Epic.
+
+Instead of each chat rebuilding the project from scratch, the Epic holds the important context once and makes it available to the tabs and agents that need it.
+
+## Context Sources
+
+An Epic can draw context from:
+
+- specs
+- tickets
+- chat history
+- selected files
+- workspace metadata
+- implementation notes
+- review findings
+- diffs and changed files
+- decisions recorded during planning
+
+## How Agents Use It
+
+Agents inside an Epic can reference the same captured intent. That makes handoffs and agent-to-agent communication more reliable because each agent starts from the same workspace state.
+
+## What to Capture
+
+Capture context that is hard to infer from code:
+
+- product intent
+- acceptance criteria
+- non-obvious constraints
+- rejected approaches
+- API compatibility requirements
+- migration concerns
+- release risks
+
+Good Epic context turns a long chat into a structured project memory.

@@ -1,0 +1,40 @@
+---
+title: "Review Workflows"
+description: "Use Traycer to review agent changes, human changes, and Epic implementation state."
+keywords: ["review", "code review", "agent review"]
+---
+
+Review workflows help keep agent output from becoming untracked code churn.
+
+## What to Review
+
+Review:
+
+- correctness
+- regressions
+- missing tests
+- behavior changes
+- API compatibility
+- security-sensitive paths
+- mismatches between specs and implementation
+
+## Review Patterns
+
+### Review a Current Diff
+
+Ask an agent to review the current changes. Attach the relevant spec or ticket if the change belongs to an Epic.
+
+### Review a Ticket
+
+Ask whether the implementation satisfies the ticket's acceptance criteria.
+
+### Review Another Agent
+
+Use a different provider or model to inspect an implementation agent's output. This is one of the simplest high-value handoffs.
+
+## Good Review Prompts
+
+- "Review this diff for correctness regressions and missing tests."
+- "Check whether this implementation satisfies the ticket acceptance criteria."
+- "Find any places where this code violates the spec."
+- "Suggest the smallest fix for each blocking issue."

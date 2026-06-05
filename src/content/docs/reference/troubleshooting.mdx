@@ -1,0 +1,56 @@
+---
+title: "Troubleshooting"
+description: "Fix common Traycer setup and provider issues."
+keywords: ["troubleshooting", "provider unavailable", "agent issue"]
+---
+
+Use this page when a provider, workspace, or agent session is not behaving as expected.
+
+## Provider Does Not Appear
+
+Check:
+
+- the provider is enabled in **Settings -> Providers**
+- the selected CLI path exists
+- the CLI runs in your shell
+- authentication works outside Traycer
+- Cursor has a saved API key or `CURSOR_API_KEY`
+- provider availability was refreshed after changes
+
+## Agent Cannot Edit
+
+Check:
+
+- permission mode
+- repository path
+- whether the selected provider supports the chosen permission mode
+- whether the worktree or branch is writable
+
+## Model List Looks Wrong
+
+Check:
+
+- the active provider account
+- the selected provider binary
+- upstream provider configuration
+- whether the provider has been refreshed
+
+## Handoff Loses Context
+
+Make the handoff more explicit:
+
+- include the current goal
+- select relevant specs or tickets
+- reference the current diff
+- describe what has already been done
+- state what the next agent should decide or implement
+
+## Agent Coordination Stalls
+
+If agent-to-agent work stalls:
+
+- list active agents
+- check whether a reply was expected
+- inspect the relevant transcript
+- stop an active child agent if it is no longer useful
+- send a focused clarification message

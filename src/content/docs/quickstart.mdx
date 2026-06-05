@@ -1,0 +1,83 @@
+---
+title: "Quickstart"
+description: "Install Traycer, connect your existing agent accounts, and start your first chat or Epic."
+keywords: ["quickstart", "install traycer", "claude code", "codex", "opencode", "cursor", "epic mode"]
+---
+
+This guide gets you from a fresh Traycer install to a working agent session.
+
+## 1. Install Traycer
+
+Install the Traycer app for your platform from the project release channel. After launch, sign in if you want cloud-backed account features; local agent workflows can be configured from the app settings.
+
+<Note>
+Traycer is open source and free to use. Bring your own agent accounts for providers such as Claude Code, Codex, OpenCode, and Cursor.
+</Note>
+
+## 2. Connect Providers
+
+Open **Settings -> Providers** and enable the agents you want Traycer to use.
+
+Typical setup:
+
+- **Claude Code**: select the detected Claude Code CLI or add a custom path.
+- **Codex**: select the detected Codex CLI or add a custom path.
+- **OpenCode**: select the detected OpenCode CLI or add a custom path.
+- **Cursor**: paste a Cursor API key for GUI chat support.
+
+See [Connect providers](/getting-started/connect-providers) for the full setup flow.
+
+## 3. Import Existing Access
+
+Traycer does not require you to buy a separate model plan to start. If you already use Claude Code, Codex, OpenCode, or Cursor, connect that existing account or CLI installation and Traycer will use it as the execution backend.
+
+See [Import existing subscriptions](/getting-started/import-existing-subscriptions).
+
+## 4. Start a Regular Chat
+
+Use **Regular Mode** for direct coding work:
+
+<Steps>
+  <Step title="Choose a workspace">
+    Select the repository or worktree you want the agent to operate on.
+  </Step>
+  <Step title="Pick an agent">
+    Choose a provider, model, reasoning level, and permission mode.
+  </Step>
+  <Step title="Describe the work">
+    Ask for a change, investigation, refactor, review, or explanation.
+  </Step>
+  <Step title="Continue or hand off">
+    Keep working with the same agent, hand the work to another model, or move the conversation into a structured Epic.
+  </Step>
+</Steps>
+
+## 5. Start an Epic
+
+Use **Epic Mode** when the work needs structure across multiple chats, specs, tickets, terminal agents, reviews, and diffs.
+
+<Steps>
+  <Step title="Create an Epic">
+    Start from a problem statement, product idea, bug, or implementation goal.
+  </Step>
+  <Step title="Capture context">
+    Add specs, tickets, chats, and related files so every agent can work from the same source of truth.
+  </Step>
+  <Step title="Run agents">
+    Open GUI chats or terminal agents inside the Epic. Every tab can use the Epic context.
+  </Step>
+  <Step title="Review and continue">
+    Inspect changes, hand off to another model, or ask another agent to verify the work.
+  </Step>
+</Steps>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="First Chat" icon="comments" href="/getting-started/first-chat">
+    Start a direct coding session in Regular Mode.
+  </Card>
+  <Card title="First Epic" icon="layer-group" href="/getting-started/first-epic">
+    Create a structured workspace with shared context.
+  </Card>
+</CardGroup>

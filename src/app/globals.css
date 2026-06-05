@@ -261,3 +261,41 @@ textarea {
   color: #fff;
   font-weight: 600;
 }
+
+/* ── Doc tables (GFM) ── */
+.doc-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+  overflow-x: auto;
+  display: block;
+}
+
+.doc-body thead tr {
+  border-bottom: 2px solid var(--traycer-teal-dark);
+}
+
+.doc-body th {
+  text-align: left;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  color: var(--traycer-teal-light);
+  white-space: nowrap;
+}
+
+.doc-body td {
+  padding: 0.6rem 1rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: top;
+}
+
+.doc-body tbody tr:hover td {
+  background: var(--surface-hover);
+  color: #fff;
+}
+
+.doc-body tbody tr:last-child td {
+  border-bottom: none;
+}

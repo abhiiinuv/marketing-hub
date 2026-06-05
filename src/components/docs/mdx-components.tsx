@@ -12,34 +12,55 @@ function Card({
   children: ReactNode | undefined;
 }) {
   const inner = (
-    <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] p-4 transition-colors hover:border-[var(--traycer-teal-muted)] hover:bg-[var(--surface-hover)]">
-      <p className="mb-1 text-sm font-semibold text-white">{title}</p>
-      {children && <p className="text-xs text-[var(--text-muted)]">{children}</p>}
+    <div className="group flex flex-col justify-between gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] p-4 transition-all hover:border-[var(--traycer-teal-muted)] hover:bg-[var(--surface-hover)]">
+      <div>
+        <p className="mb-1.5 text-sm font-semibold text-white">{title}</p>
+        {children && (
+          <p className="text-xs leading-relaxed text-[var(--text-muted)]">{children}</p>
+        )}
+      </div>
+      {href && (
+        <span className="flex items-center gap-1 text-xs font-medium text-[var(--traycer-teal-light)] transition-colors group-hover:text-[#a8d4d4]">
+          Learn more
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </span>
+      )}
     </div>
   );
-  if (href) {
-    const isExternal = href.startsWith("http");
-    return isExternal ? (
-      <a href={href} target="_blank" rel="noreferrer" className="block no-underline">
-        {inner}
-      </a>
-    ) : (
-      <Link href={`/docs${href}`} className="block no-underline">
-        {inner}
-      </Link>
-    );
-  }
-  return inner;
+
+  if (!href) return inner;
+  const isExternal = href.startsWith("http");
+  return isExternal ? (
+    <a href={href} target="_blank" rel="noreferrer" className="block no-underline">
+      {inner}
+    </a>
+  ) : (
+    <Link href={`/docs${href}`} className="block no-underline">
+      {inner}
+    </Link>
+  );
 }
 
 function CardGroup({ cols, children }: { cols: number | undefined; children: ReactNode }) {
-  const gridCols = cols === 3 ? "grid-cols-3" : "grid-cols-2";
-  return <div className={`my-6 grid gap-4 sm:${gridCols}`}>{children}</div>;
+  const gridCols = cols === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2";
+  return <div className={`my-6 grid grid-cols-1 gap-4 ${gridCols}`}>{children}</div>;
 }
 
 function Columns({ cols, children }: { cols: number | undefined; children: ReactNode }) {
-  const gridCols = cols === 3 ? "grid-cols-3" : "grid-cols-2";
-  return <div className={`my-6 grid gap-4 sm:${gridCols}`}>{children}</div>;
+  const gridCols = cols === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2";
+  return <div className={`my-6 grid grid-cols-1 gap-4 ${gridCols}`}>{children}</div>;
 }
 
 function Note({ children }: { children: ReactNode }) {

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import { getAllDocSlugs, getDocBySlug } from "@/lib/docs";
 import { mdxComponents } from "@/components/docs/mdx-components";
 
@@ -36,7 +37,11 @@ export default async function DocPage({ params }: Props) {
         <p className="mb-8 text-base text-[var(--text-muted)]">{doc.frontmatter.description}</p>
       )}
       <div className="doc-body">
-        <MDXRemote source={doc.content} components={mdxComponents} />
+        <MDXRemote
+          source={doc.content}
+          components={mdxComponents}
+          options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+        />
       </div>
     </article>
   );
